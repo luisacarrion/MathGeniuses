@@ -62,7 +62,7 @@ public class MainActivity extends PlusBaseActivity {
 		try {
 			String givenName = Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getName().getGivenName();
 			mUsername = givenName != null? givenName : "";
-			mTxtWelcome.setText(mUsername + ", " + mTxtWelcome.getText());
+			mTxtWelcome.setText(mUsername + ", " + getString(R.string.welcome) );
 		} catch (Exception e) {
 			Log.e(TAG, "Given name not found.\n" + e.getMessage());
 		}
