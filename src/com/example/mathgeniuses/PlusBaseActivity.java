@@ -34,7 +34,7 @@ public abstract class PlusBaseActivity extends Activity implements
 	public boolean mPlusClientIsConnecting = false;
 
 	// This is the helper object that connects to Google Play Services.
-	private GoogleApiClient mPlusClient;
+	private GoogleApiClient mGoogleApiClient;
 	
 	// The saved result from {@link #onConnectionFailed(ConnectionResult)}. If a
 	// connection
@@ -77,7 +77,7 @@ public abstract class PlusBaseActivity extends Activity implements
 		// Initialize the PlusClient connection.
 		// Scopes indicate the information about the user your application will
 		// be able to access.
-		mPlusClient = new GoogleApiClient.Builder(this, this, this)
+		mGoogleApiClient = new GoogleApiClient.Builder(this, this, this)
 				.addApi(Plus.API)
 		        .addScope(Plus.SCOPE_PLUS_LOGIN)
 		        .build();
@@ -90,7 +90,7 @@ public abstract class PlusBaseActivity extends Activity implements
 	 * Try to sign in the user.
 	 */
 	public void signIn() {
-		if (!mPlusClient.isConnected()) {
+		if (!mGoogleApiClient.isConnected()) {
 			// Show the dialog as we are now signing in.
 			setProgressBarVisible(true);
 			// Make sure that we will start the resolution (e.g. fire the intent
@@ -119,8 +119,8 @@ public abstract class PlusBaseActivity extends Activity implements
 	 * .
 	 */
 	private void initiatePlusClientConnect() {
-		if (!mPlusClient.isConnected() && !mPlusClient.isConnecting()) {
-			mPlusClient.connect();
+		if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
+			mGoogleApiClient.connect();
 		}
 	}
 
@@ -129,8 +129,8 @@ public abstract class PlusBaseActivity extends Activity implements
 	 * can throw an error.) This will call back to {@link #onDisconnected()}.
 	 */
 	private void initiatePlusClientDisconnect() {
-		if (mPlusClient.isConnected()) {
-			mPlusClient.disconnect();
+		if (mGoogleApiClient.isConnected()) {
+			mGoogleApiClient.disconnect();
 		}
 	}
 
@@ -140,12 +140,12 @@ public abstract class PlusBaseActivity extends Activity implements
 	public void signOut() {
 
 		// We only want to sign out if we're connected.
-		if (mPlusClient.isConnected()) {
+		if (mGoogleApiClient.isConnected()) {
 			// Clear the default account in order to allow the user to
 			// potentially choose a
 			// different account from the account chooser.
 			// mPlusClient.clearDefaultAccount();
-			Plus.AccountApi.clearDefaultAccount(mPlusClient);
+			Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
 
 
 			// Disconnect from Google Play Services, then reconnect in order to
@@ -154,6 +154,9 @@ public abstract class PlusBaseActivity extends Activity implements
 			initiatePlusClientDisconnect();
 
 			Log.v(TAG, "Sign out successful!");
+			
+			updateConnectButtonState();
+			onPlusClientSignOut();
 		}
 
 		updateConnectButtonState();
@@ -164,7 +167,7 @@ public abstract class PlusBaseActivity extends Activity implements
 	 */
 	public void revokeAccess() {
 
-		if (mPlusClient.isConnected()) {
+		if (mGoogleApiClient.isConnected()) {
 			// Clear the default account as in the Sign Out.
 			/*
 			mPlusClient.clearDefaultAccount();
@@ -181,13 +184,13 @@ public abstract class PlusBaseActivity extends Activity implements
 						}
 					});*/
 			
-			Plus.AccountApi.clearDefaultAccount(mPlusClient);
+			Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
 
 			// Revoke access to this entire application. This will call back to
 			// onAccessRevoked when it is complete, as it needs to reach the
 			// Google
 			// authentication servers to revoke all tokens.
-			Plus.AccountApi.revokeAccessAndDisconnect(mPlusClient)
+			Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient)
 					.setResultCallback(new ResultCallback<Status>() {
 						
 						@Override
@@ -295,6 +298,7 @@ public abstract class PlusBaseActivity extends Activity implements
 	 */
 	@Override
 	public void onConnectionSuspended (int cause) {
+		// TODO: This method is not getting called after initiatePlusClientDisconnect(), so maybe we should remove it
 		updateConnectButtonState();
 		onPlusClientSignOut();
 	}
@@ -326,8 +330,8 @@ public abstract class PlusBaseActivity extends Activity implements
 		}
 	}
 
-	public GoogleApiClient getPlusClient() {
-		return mPlusClient;
+	public GoogleApiClient getGoogleApiClient() {
+		return mGoogleApiClient;
 	}
 
 }

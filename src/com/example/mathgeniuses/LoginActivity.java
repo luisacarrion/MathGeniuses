@@ -7,6 +7,7 @@ import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -231,27 +232,9 @@ public class LoginActivity extends PlusBaseActivity implements
 
 	@Override
 	protected void onPlusClientSignIn() {
-		
-		/**
-		 * TODO: Put here code to start next activity
-		 */
-		
-		// TODO: put this buttons in the settings menu on the next activity
-		// Set up sign out and disconnect buttons.
-		Button signOutButton = (Button) findViewById(R.id.plus_sign_out_button);
-		signOutButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				signOut();
-			}
-		});
-		Button disconnectButton = (Button) findViewById(R.id.plus_disconnect_button);
-		disconnectButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				revokeAccess();
-			}
-		});
+		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
+		this.finish();
 	}
 
 	@Override
@@ -261,7 +244,7 @@ public class LoginActivity extends PlusBaseActivity implements
 
 	@Override
 	protected void updateConnectButtonState() {
-		boolean connected = getPlusClient().isConnected();
+		boolean connected = getGoogleApiClient().isConnected();
 
 		mSignOutButtons.setVisibility(connected ? View.VISIBLE : View.GONE);
 		mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
