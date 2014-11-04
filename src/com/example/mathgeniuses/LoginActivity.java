@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -26,6 +25,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.mathgeniuses.util.PlusBaseActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -63,7 +64,6 @@ public class LoginActivity extends PlusBaseActivity implements
 	private View mProgressView;
 	private View mEmailLoginFormView;
 	private SignInButton mPlusSignInButton;
-	private View mSignOutButtons;
 	private View mLoginFormView;
 
 	@Override
@@ -118,7 +118,6 @@ public class LoginActivity extends PlusBaseActivity implements
 		mLoginFormView = findViewById(R.id.login_form);
 		mProgressView = findViewById(R.id.login_progress);
 		mEmailLoginFormView = findViewById(R.id.email_login_form);
-		mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
 	}
 
 	private void populateAutoComplete() {
@@ -244,11 +243,7 @@ public class LoginActivity extends PlusBaseActivity implements
 
 	@Override
 	protected void updateConnectButtonState() {
-		boolean connected = getGoogleApiClient().isConnected();
-
-		mSignOutButtons.setVisibility(connected ? View.VISIBLE : View.GONE);
-		mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
-		mEmailLoginFormView.setVisibility(connected ? View.GONE : View.VISIBLE); 
+		// Button state doesn't change if the user connects/disconnects
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.example.mathgeniuses;
+package com.example.mathgeniuses.util;
 
 import android.content.Intent;
 import android.content.IntentSender;
@@ -16,6 +16,8 @@ import com.google.android.gms.plus.PlusClient;
 
 /**
  * A base class to wrap communication with the Google Play Services PlusClient.
+ * This class creates the GoogleApiClient object to allow the user to connect 
+ * with her/his Google+ account.
  */
 public abstract class PlusBaseActivity extends Activity implements 
 		GoogleApiClient.ConnectionCallbacks,

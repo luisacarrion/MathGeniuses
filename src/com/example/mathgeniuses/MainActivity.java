@@ -1,5 +1,6 @@
 package com.example.mathgeniuses;
 
+import com.example.mathgeniuses.util.PlusBaseActivity;
 import com.google.android.gms.plus.Plus;
 
 import android.content.Intent;
@@ -11,6 +12,9 @@ import android.widget.TextView;
 
 
 public class MainActivity extends PlusBaseActivity {
+	
+	private TextView mTxtWelcome;
+	private String mUsername;
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 	
@@ -19,10 +23,11 @@ public class MainActivity extends PlusBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        mTxtWelcome = ((TextView) findViewById(R.id.txtWelcome));
+        
         signIn();
          
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,15 +55,18 @@ public class MainActivity extends PlusBaseActivity {
 
 
 
-
-
 	@Override
 	protected void onPlusClientSignIn() {
 		Log.d(TAG, "Entered onPlusClientSignIn");
 		
-        //try {
-    	((TextView) findViewById(R.id.txtHelloWorld)).setText(Plus.AccountApi.getAccountName(getGoogleApiClient()));
-
+		try {
+			String givenName = Plus.PeopleApi.getCurrentPerson(getGoogleApiClient()).getName().getGivenName();
+			mUsername = givenName != null? givenName : "";
+			mTxtWelcome.setText(mUsername + ", " + mTxtWelcome.getText());
+		} catch (Exception e) {
+			Log.e(TAG, "Given name not found.\n" + e.getMessage());
+		}
+		
 	}
 
 	@Override
