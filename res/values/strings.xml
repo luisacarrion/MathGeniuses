@@ -3,6 +3,7 @@
 
     <string name="app_name">Math Geniuses</string>
     <string name="welcome">Let\'s play with numbers!</string>
+    <string name="selectOp">To start, select operation</string>
     <string name="action_settings">Settings</string>
 
 </resources>
