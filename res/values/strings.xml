@@ -5,5 +5,16 @@
     <string name="welcome">Let\'s play with numbers!</string>
     <string name="selectOp">To start, select operation</string>
     <string name="action_settings">Settings</string>
+    <string name="operation_addition">Addition</string>
+    <string name="operation_subtraction">Subtraction</string>
+    <string name="operation_multiplication">Multiplication</string>
+    <string name="operation_division">Division</string>
+    <string name="lesson_category_0to3">between 0 and 3</string>
+    <string name="lesson_category_0to5">between 0 and 5</string>
+    <string name="lesson_category_0to7">between 0 and 7</string>
+    <string name="lesson_category_0to10">between 0 and 10</string>
+    <string name="lesson_title">Lesson</string>
+    
+    
 
 </resources>

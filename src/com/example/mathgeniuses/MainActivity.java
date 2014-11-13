@@ -3,6 +3,7 @@ package com.example.mathgeniuses;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.mathgeniuses.database.MathGeniusesDbAdapter;
 import com.example.mathgeniuses.util.OperationListener;
 import com.example.mathgeniuses.util.PlusBaseActivity;
 import com.google.android.gms.plus.Plus;
@@ -18,29 +20,51 @@ import com.google.android.gms.plus.Plus;
 public class MainActivity extends PlusBaseActivity
 {
 
+	public static final String KEY_FIRST_RUN = "firstRun";
+	private static final String TAG = MainActivity.class.getSimpleName();
+	
+	// Variables for input/output controls
 	private TextView mTxtWelcome;
 	private String mUsername;
-	private ArrayList<Button> operations;
+	private ArrayList<Button> mOperations;
 
-	private static final String TAG = MainActivity.class.getSimpleName();
+	// Variables for data
+	MathGeniusesDbAdapter mDb;
+	
+	
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		// Open database
+		mDb = new MathGeniusesDbAdapter(getApplicationContext());
+		mDb.open();
+		
+		// Check if this is the first time the application runs
+		SharedPreferences sharedPreferences = getSharedPreferences("com.example.mathgeniuses", MODE_PRIVATE);
+		if (sharedPreferences.getBoolean(KEY_FIRST_RUN, true) ) {
+			mDb.bulkInsertCatalogs();
+			sharedPreferences.edit().putBoolean(KEY_FIRST_RUN, false).commit();
+		}
+		
+		
+		// Create references to input/output controls
 		mTxtWelcome = ((TextView) findViewById(R.id.txtWelcome));
-		initialize();
-		// add listeners to the buttons
-		for (int i = 0; i < operations.size(); i++)
-		{
-			Button btnOp = operations.get(i);
+		initializeButtonsArray();
+		
+		// Add listeners to the buttons
+		for (int i = 0; i < mOperations.size(); i++) {
+			Button btnOp = mOperations.get(i);
 			String label = btnOp.getText().toString();
 			
 			btnOp.setOnClickListener((OnClickListener) new OperationListener(
 					getApplicationContext(), label));
 		}
+		
+		// Reconnect with the user's account to obtain the user's name
+		// This does the callback to onPlusClientSignIn()
 		signIn();
 
 	}
@@ -133,14 +157,14 @@ public class MainActivity extends PlusBaseActivity
 	 * This method initializes all the operation buttons and store them in an
 	 * arrayList of Button objects
 	 */
-	public void initialize()
+	public void initializeButtonsArray()
 	{
-		operations = new ArrayList<Button>();
+		mOperations = new ArrayList<Button>();
 
-		operations.add((Button) findViewById(R.id.btnAdd));
-		operations.add((Button) findViewById(R.id.btnSubtract));
-		operations.add((Button) findViewById(R.id.btnMultiply));
-		operations.add((Button) findViewById(R.id.btnDivide));
-		operations.add((Button) findViewById(R.id.btnAll));
+		mOperations.add((Button) findViewById(R.id.btnAdd));
+		mOperations.add((Button) findViewById(R.id.btnSubtract));
+		mOperations.add((Button) findViewById(R.id.btnMultiply));
+		mOperations.add((Button) findViewById(R.id.btnDivide));
+		mOperations.add((Button) findViewById(R.id.btnAll));
 	}
 }
