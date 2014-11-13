@@ -1,5 +1,10 @@
 package com.example.mathgeniuses.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.example.mathgeniuses.database.MathGeniusesContract.Lesson;
+
 public class LessonObject {
 
 	private long mId;
@@ -35,6 +40,13 @@ public class LessonObject {
 	
 	public void setScoreObtained(int scoreObtained) {
 		this.mScoreObtained = scoreObtained;
+	}
+	
+	public Map<String, String> asMap() {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(Lesson.COLUMN_NAME_NAME, mName);
+		map.put(Lesson.COLUMN_NAME_SCORE_OBTAINED, String.valueOf(mScoreObtained));
+		return map;
 	}
 	
 	
