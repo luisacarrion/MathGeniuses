@@ -22,9 +22,12 @@ import android.util.Log;
 
 public class MathGeniusesDbAdapter {
 	
+	private static final boolean DEBUG = true;
+	
     protected Context mContext;
     private SQLiteOpenHelper mDbHelper;
     private SQLiteDatabase mDb;
+    
 	
     public MathGeniusesDbAdapter(Context context) {
     	mContext = context;
@@ -41,6 +44,10 @@ public class MathGeniusesDbAdapter {
         mDb.close();
     }
     
+    public void fetchLessons() {
+    	
+    }
+    
 	public void bulkInsertCatalogs() {
 		HashMap<String, Long> operationsIds;
 		HashMap<String, Long> categoriesIds;
@@ -54,127 +61,69 @@ public class MathGeniusesDbAdapter {
 		mDb.setTransactionSuccessful();
 	    mDb.endTransaction();
 		
+		if (DEBUG) {
+			// Print contents of the database
 		
-		Cursor results = mDb.rawQuery("Select * from lessonCategory", null);
-
-        results.moveToFirst();
-        Log.d("SQL DB", "About to run over the cursor");
-        while (!results.isAfterLast()) {
-            Log.d("SQL DB", results.getString(results.getColumnIndex(LessonCategory._ID))
-            		+ " -"
-            		+ results.getString(results.getColumnIndex(LessonCategory.COLUMN_NAME_NAME)));
-            results.moveToNext();
-        }
-        results.close();
-        
-        results = mDb.rawQuery("Select * from operation", null);
-
-        results.moveToFirst();
-        Log.d("SQL DB", "About to run over the cursor");
-        while (!results.isAfterLast()) {
-            Log.d("SQL DB", results.getString(results.getColumnIndex(Operation._ID))
-            		+ " -"
-            		+ results.getString(results.getColumnIndex(Operation.COLUMN_NAME_NAME)));
-            results.moveToNext();
-        }
-        results.close();
-        
-        results = mDb.rawQuery("Select * from lesson", null);
-
-        results.moveToFirst();
-        Log.d("SQL DB", "About to run over the cursor");
-        while (!results.isAfterLast()) {
-            Log.d("SQL DB", results.getString(results.getColumnIndex(Lesson._ID))
-            		+ " -"
-            		+ results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_OPERATION_ID))
-            		+ " -"
-            		+ results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_LESSON_CATEGORY_ID))
-            		+ " -"
-            		+ results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_NAME))
-            		+ " -"
-            		+ results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_LESSON_ORDER)));
-            results.moveToNext();
-        }
-        results.close();
-        
-        results = mDb.rawQuery("Select * from exercise", null);
-        results.moveToFirst();
-        Log.d("SQL DB", "About to run over the cursor");
-        while (!results.isAfterLast()) {
-            Log.d("SQL DB", results.getString(results.getColumnIndex(Exercise._ID))
-            		+ " -"
-            		+ results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_LESSON_ID))
-            		+ " -"
-            		+ results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_EXERCISE))
-            		+ " -"
-            		+ results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_EXERCISE_ORDER)));
-            results.moveToNext();
-        }
-        results.close();
-        
+			Cursor results = mDb.rawQuery("Select * from lessonCategory", null);
+	
+	        results.moveToFirst();
+	        Log.d("SQL DB", "About to run over the cursor");
+	        while (!results.isAfterLast()) {
+	            Log.d("SQL DB", results.getString(results.getColumnIndex(LessonCategory._ID))
+	            		+ " -"
+	            		+ results.getString(results.getColumnIndex(LessonCategory.COLUMN_NAME_NAME)));
+	            results.moveToNext();
+	        }
+	        results.close();
+	        
+	        results = mDb.rawQuery("Select * from operation", null);
+	
+	        results.moveToFirst();
+	        Log.d("SQL DB", "About to run over the cursor");
+	        while (!results.isAfterLast()) {
+	            Log.d("SQL DB", results.getString(results.getColumnIndex(Operation._ID))
+	            		+ " -"
+	            		+ results.getString(results.getColumnIndex(Operation.COLUMN_NAME_NAME)));
+	            results.moveToNext();
+	        }
+	        results.close();
+	        
+	        results = mDb.rawQuery("Select * from lesson", null);
+	
+	        results.moveToFirst();
+	        Log.d("SQL DB", "About to run over the cursor");
+	        while (!results.isAfterLast()) {
+	            Log.d("SQL DB", results.getString(results.getColumnIndex(Lesson._ID))
+	            		+ " -"
+	            		+ results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_OPERATION_ID))
+	            		+ " -"
+	            		+ results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_LESSON_CATEGORY_ID))
+	            		+ " -"
+	            		+ results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_NAME))
+	            		+ " -"
+	            		+ results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_LESSON_ORDER)));
+	            results.moveToNext();
+	        }
+	        results.close();
+	        
+	        results = mDb.rawQuery("Select * from exercise", null);
+	        results.moveToFirst();
+	        Log.d("SQL DB", "About to run over the cursor");
+	        while (!results.isAfterLast()) {
+	            Log.d("SQL DB", results.getString(results.getColumnIndex(Exercise._ID))
+	            		+ " -"
+	            		+ results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_LESSON_ID))
+	            		+ " -"
+	            		+ results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_EXERCISE))
+	            		+ " -"
+	            		+ results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_EXERCISE_ORDER)));
+	            results.moveToNext();
+	        }
+	        results.close();
+		}
         
 		
 	}
-	
-	/*private void bulkInsertOperations() {
-		Map<String, Long> ids = new HashMap<String, Long>();
-		
-		String sql = "INSERT INTO "+ Operation.TABLE_NAME +" VALUES (?);";
-        SQLiteStatement statement = mDb.compileStatement(sql);
-        mDb.beginTransaction();
-        
-        statement.bindString(1, mContext.getString(R.string.operation_addition));
-        statement.executeInsert();
-        
-        statement.clearBindings();
-        statement.bindString(1, mContext.getString(R.string.operation_subtraction));
-        statement.executeInsert();
-        
-        statement.clearBindings();
-        statement.bindString(1, mContext.getString(R.string.operation_multiplication));
-        statement.executeInsert();
-        
-        statement.clearBindings();
-        statement.bindString(1, mContext.getString(R.string.operation_division));
-        statement.executeInsert();
-        
-        statement.clearBindings();
-        statement.bindString(1, "");
-        statement.executeInsert();
-        
-        mDb.setTransactionSuccessful();	
-        mDb.endTransaction();
-	}*/
-		
-	/*private void bulkInsertLessonCategories() {
-		Map<String, Long> ids = new HashMap<String, Long>();
-		
-		String sql = "INSERT INTO "+ LessonCategory.TABLE_NAME +" VALUES (?,?);";
-        SQLiteStatement statement = mDb.compileStatement(sql);
-        mDb.beginTransaction();
-        
-        statement.bindString(1, mContext.getString(R.string.lesson_category_0to3));
-        statement.bindLong(2, 3);
-        statement.executeInsert();
-        
-        statement.clearBindings();
-        statement.bindString(1, mContext.getString(R.string.lesson_category_0to5));
-        statement.bindLong(2, 5);
-        statement.executeInsert();
-        
-        statement.clearBindings();
-        statement.bindString(1, mContext.getString(R.string.lesson_category_0to7));
-        statement.bindLong(2, 7);
-        statement.executeInsert();
-        
-        statement.clearBindings();
-        statement.bindString(1, mContext.getString(R.string.lesson_category_0to10));
-        statement.bindLong(2, 10);
-        statement.executeInsert();
-        
-        mDb.setTransactionSuccessful();	
-        mDb.endTransaction();
-	}*/
 	
 	private HashMap<String, Long> bulkInsertOperations() {
 		HashMap<String, Long> operationsIds = new HashMap<String, Long>();
@@ -427,33 +376,6 @@ public class MathGeniusesDbAdapter {
 			
 		}
 	}
-	
-
-	public class Catalogs {
-		
-		public List<String> operations;
-		
-		public List<Map<String, String>> lessonCategories; 
-		
-		public List<String> lessons; 
-		
-		public List<String> exercises;
-		
-		Catalogs() {
-			operations = new ArrayList<String>();
-			operations.addAll( Arrays.asList(new String[] {
-					mContext.getString(R.string.operation_addition),
-					mContext.getString(R.string.operation_subtraction),
-					mContext.getString(R.string.operation_multiplication),
-					mContext.getString(R.string.operation_division)
-			} ) );
-			
-			lessonCategories = new ArrayList<Map<String,String>>();
-			
-			
-		}
-	}
-	
 	
 	
 }
