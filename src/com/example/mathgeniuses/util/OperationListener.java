@@ -34,26 +34,26 @@ public class OperationListener implements OnClickListener
 		if (label.equals("+"))
 		{
 			mDb.fetchLessons(1);
-			
+			mDb.fetchOperations();			
 			dialogs.showToast("The addition "+message);  
 		} else if (label.equals("-"))
 		{
-			// show subtraction lessons
+			mDb.fetchLessons(2);
 			
 			dialogs.showToast("The subtraction "+message); 
 		} else if (label.equals("x"))
 		{
-			// show multiplication lessons
+			mDb.fetchLessons(3);
 			
 			dialogs.showToast("The multiplication "+message); 
 		} else if (label.equals("/"))
 		{
-			// show division lessons
+			mDb.fetchLessons(4);
 			
 			dialogs.showToast("The division "+message); 
 		} else
 		{
-			// show lessons with mixed operations
+			mDb.fetchLessons();
 			
 			dialogs.showToast("The mixed "+message); 
 		}

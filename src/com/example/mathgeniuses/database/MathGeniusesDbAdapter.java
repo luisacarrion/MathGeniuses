@@ -12,7 +12,9 @@ import com.example.mathgeniuses.database.MathGeniusesContract.Exercise;
 import com.example.mathgeniuses.database.MathGeniusesContract.Lesson;
 import com.example.mathgeniuses.database.MathGeniusesContract.LessonCategory;
 import com.example.mathgeniuses.database.MathGeniusesContract.Operation;
+import com.example.mathgeniuses.model.ExerciseObject;
 import com.example.mathgeniuses.model.LessonObject;
+import com.example.mathgeniuses.model.OperationObject;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -45,7 +47,43 @@ public class MathGeniusesDbAdapter {
         mDb.close();
     }
     
-    public List<LessonObject> fetchLessons(long operationId) {
+    
+    
+    public List<OperationObject> fetchOperations() {
+    	List<OperationObject> operationsList = new ArrayList<OperationObject>();
+    	
+    	String[] projection = {
+    	         Operation._ID,
+    	         Operation.COLUMN_NAME_NAME,
+    	         };
+    	
+    	Cursor results = mDb.query(
+    			Operation.TABLE_NAME,  // The table to query
+    			projection,         // The columns to return
+    			null,          		// The columns for the WHERE clause
+    			null,      			// The values for the WHERE clause
+    			null,               // don't group the rows
+    			null,               // don't filter by row groups
+    			null           		// The sort order
+    		);
+
+    	results.moveToFirst();
+        while (!results.isAfterLast()) {
+        	operationsList.add( new OperationObject(
+        			results.getLong(results.getColumnIndex(Operation._ID)), 
+        			results.getString(results.getColumnIndex(Operation.COLUMN_NAME_NAME))
+        			));
+            results.moveToNext();
+        }
+        results.close();
+        
+        return operationsList;
+    }
+    
+    
+    
+    
+    public List<LessonObject> fetchLessons(long... operationIds) {
     	
     	List<LessonObject> lessonsList = new ArrayList<LessonObject>();
     	
@@ -54,9 +92,26 @@ public class MathGeniusesDbAdapter {
     	         Lesson.COLUMN_NAME_NAME,
     	         Lesson.COLUMN_NAME_SCORE_OBTAINED,
     	         };
+    	
+    	String selection = null;
+    	String[] selectionArgs = null;
 
-    	String selection = Lesson.COLUMN_NAME_OPERATION_ID + " = ?";
-    	String[] selectionArgs = { String.valueOf(operationId) };
+    	if (operationIds.length > 0) {
+    		selectionArgs = new String[operationIds.length];
+    		
+    		StringBuilder s = new StringBuilder();
+    		
+    		s.append(Lesson.COLUMN_NAME_OPERATION_ID + " IN (");
+    		
+    		for (int i = 0; i < operationIds.length; i++) {
+    			s.append("?");
+    			if (i < operationIds.length-1) {s.append(",");};
+    			selectionArgs[i] = String.valueOf(operationIds[i]); 
+    		}
+    		s.append(")");
+    		selection = s.toString();
+    	}
+
 
     	// How you want the results sorted in the resulting Cursor
     	String sortOrder =
@@ -86,7 +141,48 @@ public class MathGeniusesDbAdapter {
         return lessonsList;
     }
     
-	public void bulkInsertCatalogs() {
+    public List<ExerciseObject> fetchExercises(long lessonId) {
+    	List<ExerciseObject> exercisesList = new ArrayList<ExerciseObject>();
+    	
+    	String[] projection = {
+    	         Exercise._ID,
+    	         Exercise.COLUMN_NAME_EXERCISE,
+    	         Exercise.COLUMN_NAME_SCORE_OBTAINED,
+    	         };
+    	
+    	String selection = Exercise.COLUMN_NAME_LESSON_ID + " = ?";
+    	String[] selectionArgs = { String.valueOf(lessonId) };
+
+
+    	// How you want the results sorted in the resulting Cursor
+    	String sortOrder =
+    			Exercise.COLUMN_NAME_EXERCISE_ORDER + " ASC";
+
+    	Cursor results = mDb.query(
+    			Exercise.TABLE_NAME,  // The table to query
+    			projection,         // The columns to return
+    			selection,          // The columns for the WHERE clause
+    			selectionArgs,      // The values for the WHERE clause
+    			null,               // don't group the rows
+    			null,               // don't filter by row groups
+    			sortOrder           // The sort order
+    		);
+
+    	results.moveToFirst();
+        while (!results.isAfterLast()) {
+        	exercisesList.add(new ExerciseObject(
+        			results.getLong(results.getColumnIndex(Lesson._ID)), 
+        			results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_EXERCISE)), 
+        			results.getInt(results.getColumnIndex(Exercise.COLUMN_NAME_SCORE_OBTAINED))
+        			));
+            results.moveToNext();
+        }
+        results.close();
+        
+        return exercisesList;
+    }
+    
+    public void bulkInsertCatalogs() {
 		HashMap<String, Long> operationsIds;
 		HashMap<String, Long> categoriesIds;
 		
