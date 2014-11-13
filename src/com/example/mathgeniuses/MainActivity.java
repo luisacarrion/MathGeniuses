@@ -60,7 +60,7 @@ public class MainActivity extends PlusBaseActivity
 			String label = btnOp.getText().toString();
 			
 			btnOp.setOnClickListener((OnClickListener) new OperationListener(
-					getApplicationContext(), label));
+					getApplicationContext(), label, mDb));
 		}
 		
 		// Reconnect with the user's account to obtain the user's name

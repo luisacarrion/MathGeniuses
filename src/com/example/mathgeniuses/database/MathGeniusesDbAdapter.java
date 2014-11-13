@@ -12,6 +12,7 @@ import com.example.mathgeniuses.database.MathGeniusesContract.Exercise;
 import com.example.mathgeniuses.database.MathGeniusesContract.Lesson;
 import com.example.mathgeniuses.database.MathGeniusesContract.LessonCategory;
 import com.example.mathgeniuses.database.MathGeniusesContract.Operation;
+import com.example.mathgeniuses.model.LessonObject;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -44,8 +45,45 @@ public class MathGeniusesDbAdapter {
         mDb.close();
     }
     
-    public void fetchLessons() {
+    public List<LessonObject> fetchLessons(long operationId) {
     	
+    	List<LessonObject> lessonsList = new ArrayList<LessonObject>();
+    	
+    	String[] projection = {
+    	         Lesson._ID,
+    	         Lesson.COLUMN_NAME_NAME,
+    	         Lesson.COLUMN_NAME_SCORE_OBTAINED,
+    	         };
+
+    	String selection = Lesson.COLUMN_NAME_OPERATION_ID + " = ?";
+    	String[] selectionArgs = { String.valueOf(operationId) };
+
+    	// How you want the results sorted in the resulting Cursor
+    	String sortOrder =
+    			Lesson.COLUMN_NAME_LESSON_ORDER + " ASC";
+
+    	Cursor results = mDb.query(
+    			Lesson.TABLE_NAME,  // The table to query
+    			projection,         // The columns to return
+    			selection,          // The columns for the WHERE clause
+    			selectionArgs,      // The values for the WHERE clause
+    			null,               // don't group the rows
+    			null,               // don't filter by row groups
+    			sortOrder           // The sort order
+    		);
+
+    	results.moveToFirst();
+        while (!results.isAfterLast()) {
+        	lessonsList.add(new LessonObject(
+        			results.getLong(results.getColumnIndex(Lesson._ID)), 
+        			results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_NAME)), 
+        			results.getInt(results.getColumnIndex(Lesson.COLUMN_NAME_SCORE_OBTAINED))
+        			));
+            results.moveToNext();
+        }
+        results.close();
+        
+        return lessonsList;
     }
     
 	public void bulkInsertCatalogs() {

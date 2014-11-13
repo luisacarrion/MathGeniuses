@@ -1,5 +1,7 @@
 package com.example.mathgeniuses.util;
 
+import com.example.mathgeniuses.database.MathGeniusesDbAdapter;
+
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,13 +16,15 @@ public class OperationListener implements OnClickListener
 	private Context context;
 	private String label;
 	private DialogsHelper dialogs;
+	private MathGeniusesDbAdapter mDb;
 
-	public OperationListener(Context _context, String _label)
+	public OperationListener(Context _context, String _label, MathGeniusesDbAdapter db)
 	{
 
 		label = _label;
 		context = _context;
 		dialogs=new DialogsHelper(context);
+		mDb = db;
 	}
 
 	@Override
@@ -29,7 +33,7 @@ public class OperationListener implements OnClickListener
 		String message ="lessons to come shortly!";
 		if (label.equals("+"))
 		{
-			// show addition lessons
+			mDb.fetchLessons(1);
 			
 			dialogs.showToast("The addition "+message);  
 		} else if (label.equals("-"))
