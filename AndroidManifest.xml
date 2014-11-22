@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mathgeniuses"
+    package="com.javaproject.mathgeniuses"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -31,12 +31,12 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
-           
+            android:name="com.javaproject.mathgeniuses.MainActivity"
+            android:label="@string/app_name" >           
         </activity>
+        
         <activity
-            android:name=".LoginActivity"
+            android:name="com.javaproject.mathgeniuses.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:noHistory="true" >
@@ -45,6 +45,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        
+         <activity
+            android:name="com.javaproject.mathgeniuses.LessonChoiceActivity"
+            android:label="@string/addition" >           
         </activity>
 
         <meta-data
