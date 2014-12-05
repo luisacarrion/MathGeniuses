@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.javaproject.mathgeniuses.database.MathGeniusesContract.Lesson;
+import com.javaproject.mathgeniuses.database.MathGeniusesContract.LessonScore;
 
 public class LessonObject {
 
@@ -45,7 +46,7 @@ public class LessonObject {
 	public Map<String, String> asMap() {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(Lesson.COLUMN_NAME_NAME, mName);
-		map.put(Lesson.COLUMN_NAME_SCORE_OBTAINED, String.valueOf(mScoreObtained));
+		map.put(LessonScore.COLUMN_NAME_SCORE, String.valueOf(mScoreObtained));
 		return map;
 	}
 	

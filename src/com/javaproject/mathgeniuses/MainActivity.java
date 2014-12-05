@@ -173,6 +173,7 @@ public class MainActivity extends PlusBaseActivity
 			{
 				// TODO Auto-generated method stub
 				mDb.fetchLessons(1);
+				mDb.fetchLessonsWithScore(1);
 				mDb.fetchOperations(); 	
 				
 				Intent intent =new Intent(MainActivity.this,LessonChoiceActivity.class);
