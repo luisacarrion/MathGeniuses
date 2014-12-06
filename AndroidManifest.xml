@@ -10,10 +10,10 @@
 
     <!-- To access Google+ APIs: -->
     <uses-permission android:name="android.permission.INTERNET" />
-    
+
     <!--
      To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user. This disconnect
-     option is required to comply with the Google+ Sign-In developer policies
+     option is required to comply with the Google+ Sign-In developer policies
     -->
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
@@ -23,8 +23,7 @@
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    
-    
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -32,31 +31,31 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.javaproject.mathgeniuses.MainActivity"
-            android:label="@string/app_name" >           
+            android:label="@string/app_name" >
         </activity>
-        
         <activity
             android:name="com.javaproject.mathgeniuses.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:noHistory="true" >
-             <intent-filter>
+            android:noHistory="true"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-         <activity
+        <activity
             android:name="com.javaproject.mathgeniuses.LessonChoiceActivity"
-            android:label="@string/addition" >           
+            android:label="@string/addition" >
+        </activity>
+        <activity
+            android:name="com.javaproject.mathgeniuses.DragAndDropActivity"
+            android:label="@string/drag" >
         </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
     </application>
-
-
 
 </manifest>

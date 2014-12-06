@@ -8,7 +8,9 @@ import com.javaproject.mathgeniuses.entities.LessonObject;
 import com.javaproject.mathgeniuses.util.DialogsHelper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -17,6 +19,7 @@ import android.widget.ListView;
 public class LessonChoiceActivity extends Activity
 {
 	private ListView mLessonsList;
+	private List<LessonObject> lessonObject;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -25,22 +28,26 @@ public class LessonChoiceActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lesson_choice);
 		mLessonsList = (ListView) findViewById(R.id.listLessons);
-		// List<LessonObject> lessons=new
-		// MathGeniusesDbAdapter(this).fetchLessons(null);
 		ArrayList<String>lessons=getLessonName();
-		mLessonsList.setAdapter(new LessonChoiceHelper(this,lessons));
+		mLessonsList.setAdapter(new LessonChoiceAdapter(this,lessons));
 		mLessonsList.setOnItemClickListener((new LessonsListListener()));
 
 	}
 
-	// The name of lessons should be got from the data base
+	// Getting the list of lessons available in the database
 	private ArrayList<String> getLessonName()
 	{
+		
+		MathGeniusesDbAdapter mathAdapter=new MathGeniusesDbAdapter(this);
+		mathAdapter.open();
+		lessonObject=mathAdapter.fetchLessons();
+		Log.i("MGEN", "The number of lessons: "+lessonObject.size());
+		mathAdapter.close();
 		ArrayList<String> lessons = new ArrayList<String>();
-		for (int i = 0; i < 5; i++)
-		{
-			lessons.add("Lesson Name " + (i + 1));
-
+		for (int i = 0; i < lessonObject.size(); i++)
+		{			
+			Log.i("MGEN", "Name: "+i+"" +lessonObject.get(i).getName()+" Id:"+lessonObject.get(i).getId());
+			lessons.add(lessonObject.get(i).getName());
 		}
 		return lessons;
 
@@ -54,6 +61,13 @@ public class LessonChoiceActivity extends Activity
 		{
 			// TODO Auto-generated method stub
 			dialogs.showToast("Lesson "+(position+1)+" Exrecices to come shortly!");
+			switch(position){
+			case 0:
+				// Drag and drop exercise
+				Intent intent=new Intent(LessonChoiceActivity.this,DragAndDropActivity.class);
+				intent.putExtra("lessonId", lessonObject.get(0).getId());
+				startActivity(intent);
+			}
 			
 		}
 		

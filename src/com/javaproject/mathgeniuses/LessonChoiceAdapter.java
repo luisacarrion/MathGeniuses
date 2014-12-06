@@ -11,12 +11,12 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-public class LessonChoiceHelper extends BaseAdapter
+public class LessonChoiceAdapter extends BaseAdapter
 {
 	private ArrayList<String> mLessonNames;
 	private LayoutInflater mInflater;
 
-	public LessonChoiceHelper(Context context, ArrayList<String> lessonNames)
+	public LessonChoiceAdapter(Context context, ArrayList<String> lessonNames)
 	{
 		mLessonNames = lessonNames;
 		mInflater = LayoutInflater.from(context);

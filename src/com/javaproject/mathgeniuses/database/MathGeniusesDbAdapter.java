@@ -13,8 +13,10 @@ import android.util.Log;
 
 import com.javaproject.mathgeniuses.R;
 import com.javaproject.mathgeniuses.database.MathGeniusesContract.Exercise;
+import com.javaproject.mathgeniuses.database.MathGeniusesContract.ExerciseScore;
 import com.javaproject.mathgeniuses.database.MathGeniusesContract.Lesson;
 import com.javaproject.mathgeniuses.database.MathGeniusesContract.LessonCategory;
+import com.javaproject.mathgeniuses.database.MathGeniusesContract.LessonScore;
 import com.javaproject.mathgeniuses.database.MathGeniusesContract.Operation;
 import com.javaproject.mathgeniuses.entities.ExerciseObject;
 import com.javaproject.mathgeniuses.entities.LessonObject;
@@ -86,8 +88,7 @@ public class MathGeniusesDbAdapter {
     	
     	String[] projection = {
     	         Lesson._ID,
-    	         Lesson.COLUMN_NAME_NAME,
-    	         Lesson.COLUMN_NAME_SCORE_OBTAINED,
+    	         Lesson.COLUMN_NAME_NAME
     	         };
     	
     	String selection = null;
@@ -129,8 +130,58 @@ public class MathGeniusesDbAdapter {
         	lessonsList.add(new LessonObject(
         			results.getLong(results.getColumnIndex(Lesson._ID)), 
         			results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_NAME)), 
-        			results.getInt(results.getColumnIndex(Lesson.COLUMN_NAME_SCORE_OBTAINED))
-        			));
+        			0)
+        	);
+            results.moveToNext();
+        }
+        results.close();
+        
+        return lessonsList;
+    }
+    
+public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
+    	
+    	List<LessonObject> lessonsList = new ArrayList<LessonObject>();
+    	
+    	String selection = null;
+    	String[] selectionArgs = null;
+
+    	if (operationIds.length > 0) {
+    		// Build a WHERE clause of type "columnName IN (value1, value2, ...)" with all the operationIds provided
+    		selectionArgs = new String[operationIds.length];
+    		StringBuilder s = new StringBuilder();
+    		
+    		s.append(Lesson.COLUMN_NAME_OPERATION_ID + " IN (");
+    		
+    		for (int i = 0; i < operationIds.length; i++) {
+    			s.append("?");
+    			if (i < operationIds.length-1) {s.append(",");};
+    			
+    			selectionArgs[i] = String.valueOf(operationIds[i]); 
+    		}
+    		s.append(")");
+    		selection = s.toString();
+    	}
+    	
+    	// Select all Exercises for a Lesson with their score
+    	// TODO: add a selection argument for the current user
+    	String sql = "SELECT " + Lesson.TABLE_NAME + "." + Lesson._ID + ", " + Lesson.COLUMN_NAME_NAME + ", " + LessonScore.COLUMN_NAME_SCORE +
+    			" FROM " + Lesson.TABLE_NAME +
+    			" LEFT JOIN " + LessonScore.TABLE_NAME +
+    			" ON " + Lesson.TABLE_NAME + "." + Lesson._ID +
+    			" = " + LessonScore.TABLE_NAME + "." + LessonScore.COLUMN_NAME_LESSON_ID +
+    			(selection != null ? " WHERE " + selection : "") +
+    			" ORDER BY " + Lesson.COLUMN_NAME_LESSON_ORDER + " ASC";
+    	
+    	Cursor results = mDb.rawQuery(sql, selectionArgs);
+    	
+    	results.moveToFirst();
+        while (!results.isAfterLast()) {
+        	lessonsList.add(new LessonObject(
+        			results.getLong(results.getColumnIndex(Lesson._ID)), 
+        			results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_NAME)), 
+        			0)
+        	);
             results.moveToNext();
         }
         results.close();
@@ -143,8 +194,7 @@ public class MathGeniusesDbAdapter {
     	
     	String[] projection = {
     	         Exercise._ID,
-    	         Exercise.COLUMN_NAME_EXERCISE,
-    	         Exercise.COLUMN_NAME_SCORE_OBTAINED,
+    	         Exercise.COLUMN_NAME_EXERCISE
     	         };
     	
     	String selection = Exercise.COLUMN_NAME_LESSON_ID + " = ?";
@@ -170,7 +220,38 @@ public class MathGeniusesDbAdapter {
         	exercisesList.add(new ExerciseObject(
         			results.getLong(results.getColumnIndex(Lesson._ID)), 
         			results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_EXERCISE)), 
-        			results.getInt(results.getColumnIndex(Exercise.COLUMN_NAME_SCORE_OBTAINED))
+        			0
+        			));
+            results.moveToNext();
+        }
+        results.close();
+        
+        return exercisesList;
+    }
+    
+    public List<ExerciseObject> fetchExercisesWithScore(long lessonId) {
+    	List<ExerciseObject> exercisesList = new ArrayList<ExerciseObject>();
+    	
+    	// Select all Exercises for a Lesson with their score
+    	// TODO: add a selection argument for the current user
+    	String sql = "SELECT " + Exercise.TABLE_NAME + "." + Exercise._ID + ", " + Exercise.COLUMN_NAME_EXERCISE + ", " + ExerciseScore.COLUMN_NAME_SCORE +
+    			" FROM " + Exercise.TABLE_NAME +
+    			" LEFT JOIN " + ExerciseScore.TABLE_NAME +
+    			" ON " + Exercise.TABLE_NAME + "." + Exercise._ID +
+    			" = " + ExerciseScore.TABLE_NAME + "." + ExerciseScore.COLUMN_NAME_EXERCISE_ID +
+    			" WHERE " + Exercise.COLUMN_NAME_LESSON_ID + " = ?" +
+    			" ORDER BY " + Exercise.COLUMN_NAME_EXERCISE_ORDER + " ASC";
+    			
+    	String[] selectionArgs = { String.valueOf(lessonId) };
+    	
+    	Cursor results = mDb.rawQuery(sql, selectionArgs);
+    	
+    	results.moveToFirst();
+        while (!results.isAfterLast()) {
+        	exercisesList.add(new ExerciseObject(
+        			results.getLong(results.getColumnIndex(Lesson._ID)), 
+        			results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_EXERCISE)), 
+        			results.getInt(results.getColumnIndex(ExerciseScore.COLUMN_NAME_SCORE))
         			));
             results.moveToNext();
         }
@@ -193,7 +274,7 @@ public class MathGeniusesDbAdapter {
 	    mDb.endTransaction();
 		
 		if (DEBUG) {
-			// Print contents of the database
+			// Log contents of the database
 		
 			Cursor results = mDb.rawQuery("Select * from lessonCategory", null);
 	
@@ -469,7 +550,7 @@ public class MathGeniusesDbAdapter {
 
 	public class MathGeniusesDbHelper extends SQLiteOpenHelper {
 		
-		public static final String DATABASE_NAME = "StudentQuizzes.db";
+		public static final String DATABASE_NAME = "MathGeniuses.db";
 		public static final int DATABASE_VERSION = 1;
 		
 		public MathGeniusesDbHelper(Context context) {
@@ -482,6 +563,8 @@ public class MathGeniusesDbAdapter {
 			db.execSQL(LessonCategory.CREATE_TABLE);
 			db.execSQL(Lesson.CREATE_TABLE);
 			db.execSQL(Exercise.CREATE_TABLE);
+			db.execSQL(ExerciseScore.CREATE_TABLE);
+			db.execSQL(LessonScore.CREATE_TABLE);
 		
 		}
 
