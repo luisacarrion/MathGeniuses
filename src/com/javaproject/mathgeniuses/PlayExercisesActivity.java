@@ -6,6 +6,7 @@ import com.javaproject.mathgeniuses.AbstractExerciseFragment.ExerciseEvents;
 import com.javaproject.mathgeniuses.database.MathGeniusesDbAdapter;
 import com.javaproject.mathgeniuses.entities.ExerciseObject;
 import com.javaproject.mathgeniuses.entities.LessonObject;
+import com.javaproject.mathgeniuses.util.DialogsHelper;
 
 import android.app.Activity;
 import android.app.ActionBar;
@@ -80,25 +81,37 @@ public class PlayExercisesActivity extends Activity implements ExerciseEvents {
 		mathAdapter.open();
 		
 		List<ExerciseObject> exerciseObjectsList;
-		exerciseObjectsList = mathAdapter.fetchExercises(lessonId);
+		exerciseObjectsList = mathAdapter.fetchExercisesWithScore(lessonId);
 		mathAdapter.close();
 		
 		return exerciseObjectsList;
 	}
 
+	/**
+	 * Method called by the fragment when the exercise ends
+	 */
 	@Override
-	public void onExerciseEnd() {
+	public void onExerciseEnd(int scoreObtained) {
+		mExerciseObjectsList.get(mCurrentExercise).setScoreObtained(scoreObtained);
+		
 		if (!exercisesCompleted()) {
+			// Exercises not completed, so move on to the next exercise
 			mCurrentExercise++;
 			
 			AbstractExerciseFragment exerciseFragment = getNewExerciseFragment();
 
 	        FragmentTransaction transaction = getFragmentManager().beginTransaction();
 	        transaction.replace(R.id.container, exerciseFragment);
-	        // Add the transaction to the back stack so the user can navigate back
-	        //transaction.addToBackStack(null);
-
 	        transaction.commit();
+		} else {
+			// Exercises completed, so show the score
+			int totalScore = 0;
+			for (ExerciseObject ex:mExerciseObjectsList) {
+				totalScore += ex.getScoreObtained();
+			}
+			
+			DialogsHelper toast = new DialogsHelper(this);
+			toast.showToast("Score: " + totalScore);
 		}
 	}
 	
@@ -110,6 +123,10 @@ public class PlayExercisesActivity extends Activity implements ExerciseEvents {
 		Bundle args = new Bundle();
         args.putString(AbstractExerciseFragment.KEY_EXERCISE, 
         		mExerciseObjectsList.get(mCurrentExercise).getExercise());
+        args.putInt(AbstractExerciseFragment.KEY_ANSWER, 
+        		mExerciseObjectsList.get(mCurrentExercise).getAnswer());
+        args.putInt(AbstractExerciseFragment.KEY_SCORE_AWARDED, 
+        		LessonObject.getScoreAwarded(new MathGeniusesDbAdapter(this), mLessonId));
         fragmentToReturn.setArguments(args);
 		
 		return fragmentToReturn;

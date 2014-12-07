@@ -6,8 +6,10 @@ import android.os.CountDownTimer;
 import android.widget.TextView;
 
 public abstract class AbstractExerciseFragment extends Fragment {
-	public static final int TIME_LIMIT_SECONDS = 10;
+	public static final int TIME_LIMIT_SECONDS = 6;
 	public static final String KEY_EXERCISE = "keyExercise";
+	public static final String KEY_ANSWER = "keyAnswer";
+	public static final String KEY_SCORE_AWARDED = "keyScoreAwarded";
 	
 	private CountDownTimer mCountDownTimer;
 	protected ExerciseEvents mCallback;
@@ -42,7 +44,8 @@ public abstract class AbstractExerciseFragment extends Fragment {
 
             public void onFinish() {
                 mTvTimer.setText("00:00");
-                mCallback.onExerciseEnd();
+                int score = calculateScore();
+                mCallback.onExerciseEnd( score );
             }
 		};
 	        
@@ -56,13 +59,15 @@ public abstract class AbstractExerciseFragment extends Fragment {
 		mCountDownTimer.cancel();
 	}
 	
+	public abstract int calculateScore();
+	
 	/**
 	 * Defines methods to be implemented by an activity that wants to know when an exercise ends.
 	 * @author MariaLuisa
 	 *
 	 */
 	public interface ExerciseEvents {
-		public void onExerciseEnd(); // Activity loads next exercise
+		public void onExerciseEnd(int scoreObtained); // Activity loads next exercise
 	}
 	
 }

@@ -90,6 +90,7 @@ public final class MathGeniusesContract {
 		
 		public static final String COLUMN_NAME_LESSON_ID = "lessonId";
 		public static final String COLUMN_NAME_EXERCISE = "exercise";
+		public static final String COLUMN_NAME_ANSWER = "answer";
 		public static final String COLUMN_NAME_EXERCISE_ORDER = "exerciseOrder";
 		
 		public static final String CREATE_TABLE = 
@@ -97,6 +98,7 @@ public final class MathGeniusesContract {
                         _ID + TYPE_INTEGER + TYPE_PRIMARY_KEY + TYPE_AUTOINCREMENT + COMMA_SEP +
                         COLUMN_NAME_LESSON_ID + TYPE_INTEGER + COMMA_SEP +
                         COLUMN_NAME_EXERCISE + TYPE_TEXT + COMMA_SEP +
+                        COLUMN_NAME_ANSWER + TYPE_TEXT + COMMA_SEP +
                         COLUMN_NAME_EXERCISE_ORDER + TYPE_INTEGER + COMMA_SEP +
                         TYPE_FOREIGN_KEY + COLUMN_NAME_LESSON_ID + TYPE_REFERENCES + Lesson.TABLE_NAME + "(" + Lesson._ID + ")" +
                         " )";

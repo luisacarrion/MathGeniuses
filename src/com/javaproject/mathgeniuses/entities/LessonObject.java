@@ -15,12 +15,14 @@ public class LessonObject {
 	private long mId;
 	private String mName;
 	private int mNumberOfAttemptedExercises;
+	private int mScoreAwarded;
 	private int mScoreObtained;
 	
 	public LessonObject(long id, String name, int scoreObtained) {
 		mId = id;
 		mName = name;
 		mNumberOfAttemptedExercises = -1;
+		mScoreAwarded = 0;
 		mScoreObtained = scoreObtained;
 	}
 	
@@ -51,12 +53,28 @@ public class LessonObject {
 		return mNumberOfAttemptedExercises;
 	}
 
-
 	public void setNumberOfAttemptedExercises(int mNumberOfAttemptedExercises) {
 		this.mNumberOfAttemptedExercises = mNumberOfAttemptedExercises;
 	}
 
-
+	public int getScoreAwarded(MathGeniusesDbAdapter db) {
+		if (mScoreAwarded == 0) {
+			db.open();
+			mScoreAwarded = db.getScoreAwardedForLesson(mId);
+			db.close();
+		} 
+		
+		return mNumberOfAttemptedExercises;
+	}
+	
+	public static int getScoreAwarded(MathGeniusesDbAdapter db, long lessonId) {
+		int scoreAwarded = 0;
+		db.open();
+		scoreAwarded = db.getScoreAwardedForLesson(lessonId);
+		db.close();
+		return scoreAwarded;
+	}
+	
 	public int getScoreObtained() {
 		return mScoreObtained;
 	}

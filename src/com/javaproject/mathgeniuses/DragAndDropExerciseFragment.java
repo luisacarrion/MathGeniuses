@@ -24,6 +24,8 @@ import android.widget.Toast;
 public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	
 	private String mExercise;
+	private int mAnswer;
+	private int mScoreAwarded;
 	private long mLessonId;
 	private int mCounter = 0;
 	
@@ -50,6 +52,8 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
         Bundle args = getArguments();
         if (args != null) {
         	mExercise = args.getString(AbstractExerciseFragment.KEY_EXERCISE);
+        	mScoreAwarded = args.getInt(AbstractExerciseFragment.KEY_SCORE_AWARDED);
+        	mAnswer = args.getInt(AbstractExerciseFragment.KEY_ANSWER);
         }
     }
 	
@@ -96,6 +100,32 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	public void onPause() {
 		super.onPause();
 		stopTimer();
+	}
+	
+	@Override
+	public int calculateScore() {
+		int score = 0;
+		int answer = Integer.parseInt( mTvAnswer.getText().toString() );
+		if (answer == mAnswer) {
+			score = mScoreAwarded;
+		}
+		return score;
+	}
+	
+	private void populate(int n, int drawable)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			mImageRefs.add(drawable);
+		}
+	}
+
+	private void populateResponseGrid(int n, int drawable)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			mAnswerImageRefs.add(drawable);
+		}
 	}
 	
 	private class ImageAdapter extends BaseAdapter
@@ -232,29 +262,13 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 			ClipData dragData = new ClipData((CharSequence) view.getTag(),
 					mimeType, item);
 
-			Toast.makeText(getActivity(), "In long click",
-					Toast.LENGTH_LONG).show();
+			//Toast.makeText(getActivity(), "In long click",
+					//Toast.LENGTH_LONG).show();
 
 			DragShadowBuilder shadowBuilder = new DragShadowBuilder(view);
 			view.startDrag(dragData, shadowBuilder, view, 0);
 
 			return true;
-		}
-	}
-
-	private void populate(int n, int drawable)
-	{
-		for (int i = 0; i < n; i++)
-		{
-			mImageRefs.add(drawable);
-		}
-	}
-
-	private void populateResponseGrid(int n, int drawable)
-	{
-		for (int i = 0; i < n; i++)
-		{
-			mAnswerImageRefs.add(drawable);
 		}
 	}
 	

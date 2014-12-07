@@ -1,13 +1,17 @@
 package com.javaproject.mathgeniuses.entities;
 
+import com.javaproject.mathgeniuses.database.MathGeniusesDbAdapter;
+
 public class ExerciseObject {
 	private long mId;
 	private String mExercise;
+	private int mAnswer;
 	private int mScoreObtained;
 	
-	public ExerciseObject(long id, String exercise, int scoreObtained) {
+	public ExerciseObject(long id, String exercise, int answer, int scoreObtained) {
 		mId = id;
 		mExercise = exercise;
+		mAnswer = answer;
 		mScoreObtained = scoreObtained;
 	}
 	
@@ -28,6 +32,16 @@ public class ExerciseObject {
 		this.mExercise = exercise;
 	}
 	
+	public int getAnswer() {
+		return mAnswer;
+	}
+
+
+	public void setAnswer(int Answer) {
+		this.mAnswer = Answer;
+	}
+
+
 	public int getScoreObtained() {
 		return mScoreObtained;
 	}
@@ -35,4 +49,5 @@ public class ExerciseObject {
 	public void setScoreObtained(int scoreObtained) {
 		this.mScoreObtained = scoreObtained;
 	}
+	
 }

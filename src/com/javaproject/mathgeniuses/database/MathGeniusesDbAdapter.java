@@ -246,7 +246,7 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
         	exercisesList.add(new ExerciseObject(
         			results.getLong(results.getColumnIndex(Lesson._ID)), 
         			results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_EXERCISE)), 
-        			0
+        			0, 0
         			));
             results.moveToNext();
         }
@@ -260,7 +260,8 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
     	
     	// Select all Exercises for a Lesson with their score
     	// TODO: add a selection argument for the current user
-    	String sql = "SELECT " + Exercise.TABLE_NAME + "." + Exercise._ID + ", " + Exercise.COLUMN_NAME_EXERCISE + ", " + ExerciseScore.COLUMN_NAME_SCORE +
+    	String sql = "SELECT " + Exercise.TABLE_NAME + "." + Exercise._ID + ", " + Exercise.COLUMN_NAME_EXERCISE + ", " + 
+    			Exercise.COLUMN_NAME_ANSWER + ", " + ExerciseScore.COLUMN_NAME_SCORE +
     			" FROM " + Exercise.TABLE_NAME +
     			" LEFT JOIN " + ExerciseScore.TABLE_NAME +
     			" ON " + Exercise.TABLE_NAME + "." + Exercise._ID +
@@ -276,7 +277,8 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
         while (!results.isAfterLast()) {
         	exercisesList.add(new ExerciseObject(
         			results.getLong(results.getColumnIndex(Lesson._ID)), 
-        			results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_EXERCISE)), 
+        			results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_EXERCISE)),
+        			results.getInt(results.getColumnIndex(Exercise.COLUMN_NAME_ANSWER)),
         			results.getInt(results.getColumnIndex(ExerciseScore.COLUMN_NAME_SCORE))
         			));
             results.moveToNext();
@@ -311,6 +313,27 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
     	return attemptedExercises;
     }
     
+    public int getScoreAwardedForLesson(long lessonId) {
+    	int scoreAwarded = 0;
+    	
+    	String sql = "SELECT " + LessonCategory.TABLE_NAME + "." + LessonCategory.COLUMN_NAME_SCORE_AWARDED +
+    			" FROM " + LessonCategory.TABLE_NAME +
+    			" INNER JOIN " + Lesson.TABLE_NAME +
+    			" ON " + LessonCategory.TABLE_NAME + "." + LessonCategory._ID +
+    			" = " + Lesson.TABLE_NAME + "." + Lesson.COLUMN_NAME_LESSON_CATEGORY_ID +
+    			" WHERE " + Lesson.TABLE_NAME + "." + Lesson._ID + " = ?";
+    			
+    	String[] selectionArgs = { String.valueOf(lessonId) };
+    	
+    	Cursor results = mDb.rawQuery(sql, selectionArgs);
+    	
+    	results.moveToFirst();
+    	scoreAwarded = results.getInt(results.getColumnIndex(LessonCategory.COLUMN_NAME_SCORE_AWARDED));
+        results.close();
+    	
+    	return scoreAwarded;
+    }
+    
     public void bulkInsertCatalogs() {
 		HashMap<String, Long> operationsIds;
 		HashMap<String, Long> categoriesIds;
@@ -333,7 +356,7 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
 	        Log.d("SQL DB", "About to run over the cursor");
 	        while (!results.isAfterLast()) {
 	            Log.d("SQL DB", results.getString(results.getColumnIndex(LessonCategory._ID))
-	            		+ " -"
+	            		+ " - "
 	            		+ results.getString(results.getColumnIndex(LessonCategory.COLUMN_NAME_NAME)));
 	            results.moveToNext();
 	        }
@@ -345,7 +368,7 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
 	        Log.d("SQL DB", "About to run over the cursor");
 	        while (!results.isAfterLast()) {
 	            Log.d("SQL DB", results.getString(results.getColumnIndex(Operation._ID))
-	            		+ " -"
+	            		+ " - "
 	            		+ results.getString(results.getColumnIndex(Operation.COLUMN_NAME_NAME)));
 	            results.moveToNext();
 	        }
@@ -357,13 +380,13 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
 	        Log.d("SQL DB", "About to run over the cursor");
 	        while (!results.isAfterLast()) {
 	            Log.d("SQL DB", results.getString(results.getColumnIndex(Lesson._ID))
-	            		+ " -"
+	            		+ " - "
 	            		+ results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_OPERATION_ID))
-	            		+ " -"
+	            		+ " - "
 	            		+ results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_LESSON_CATEGORY_ID))
-	            		+ " -"
+	            		+ " - "
 	            		+ results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_NAME))
-	            		+ " -"
+	            		+ " - "
 	            		+ results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_LESSON_ORDER)));
 	            results.moveToNext();
 	        }
@@ -374,11 +397,13 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
 	        Log.d("SQL DB", "About to run over the cursor");
 	        while (!results.isAfterLast()) {
 	            Log.d("SQL DB", results.getString(results.getColumnIndex(Exercise._ID))
-	            		+ " -"
+	            		+ " - "
 	            		+ results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_LESSON_ID))
-	            		+ " -"
+	            		+ " - "
 	            		+ results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_EXERCISE))
-	            		+ " -"
+	            		+ " - "
+	            		+ results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_ANSWER))
+	            		+ " - "
 	            		+ results.getString(results.getColumnIndex(Exercise.COLUMN_NAME_EXERCISE_ORDER)));
 	            results.moveToNext();
 	        }
@@ -429,8 +454,8 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
 				") VALUES (?,?,?,?);";
         String sqlExercise = "INSERT INTO "+ Exercise.TABLE_NAME +
 				" (" + Exercise.COLUMN_NAME_LESSON_ID  + ", " + Exercise.COLUMN_NAME_EXERCISE  + ", " + 
-				Exercise.COLUMN_NAME_EXERCISE_ORDER  + 
-				") VALUES (?,?,?);";
+				Exercise.COLUMN_NAME_ANSWER  + ", " + Exercise.COLUMN_NAME_EXERCISE_ORDER  + 
+				") VALUES (?,?,?,?);";
         
         SQLiteStatement statementLesson = mDb.compileStatement(sqlLesson);
         SQLiteStatement statementExercise = mDb.compileStatement(sqlExercise);
@@ -450,25 +475,25 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
         // Addition - Lesson 1 - Exercises
         exerciseOrder = 0;
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 1", ++exerciseOrder);
+        		"1 + 1", 2, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 0", ++exerciseOrder);
+        		"1 + 0", 1, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 1", ++exerciseOrder);
+        		"1 + 1", 2, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 1 + 1", ++exerciseOrder);
+        		"1 + 1 + 1", 3, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"0 + 2", ++exerciseOrder);
+        		"0 + 2", 2, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"2 + 1", ++exerciseOrder);
+        		"2 + 1", 3, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 1", ++exerciseOrder);
+        		"1 + 1", 2, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 2", ++exerciseOrder);
+        		"1 + 2", 3, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"3 + 0", ++exerciseOrder);
+        		"3 + 0", 3, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 0 + 2", ++exerciseOrder);
+        		"1 + 0 + 2", 3, ++exerciseOrder);
         
         
         // Addition - Lesson 2
@@ -478,25 +503,25 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
         // Addition - Lesson 2 - Exercises
         exerciseOrder = 0;
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 1 + 1", ++exerciseOrder);
+        		"1 + 1 + 1", 3, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 2", ++exerciseOrder);
+        		"1 + 2", 3, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 2 + 1", ++exerciseOrder);
+        		"1 + 2 + 1", 4, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"3 + 1", ++exerciseOrder);
+        		"3 + 1", 4, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"2 + 1 + 1", ++exerciseOrder);
+        		"2 + 1 + 1", 4, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"2 + 2", ++exerciseOrder);
+        		"2 + 2", 4, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"2 + 2 + 1", ++exerciseOrder);
+        		"2 + 2 + 1", 5, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"2 + 1 + 1 + 1", ++exerciseOrder);
+        		"2 + 1 + 1 + 1", 5, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"2 + 3", ++exerciseOrder);
+        		"2 + 3", 5, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 4", ++exerciseOrder);
+        		"1 + 4", 5, ++exerciseOrder);
   
         
         // Addition - Lesson 3
@@ -506,25 +531,25 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
         // Addition - Lesson 3 - Exercises
         exerciseOrder = 0;
         insertWithArgs(statementExercise, lastLessonId,
-        		"2 + 2 + 1", ++exerciseOrder);
+        		"2 + 2 + 1", 5, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"3 + 2", ++exerciseOrder);
+        		"3 + 2", 5, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"3 + 2 + 1", ++exerciseOrder);
+        		"3 + 2 + 1", 6, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"3 + 3", ++exerciseOrder);
+        		"3 + 3", 6, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"2 + 4", ++exerciseOrder);
+        		"2 + 4", 6, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"5 + 1", ++exerciseOrder);
+        		"5 + 1", 6, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"6 + 1", ++exerciseOrder);
+        		"6 + 1", 7, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"5 + 1", ++exerciseOrder);
+        		"5 + 1", 6, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"5 + 2", ++exerciseOrder);
+        		"5 + 2", 7, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"4 + 3", ++exerciseOrder);
+        		"4 + 3", 7, ++exerciseOrder);
         
         // Addition - Lesson 4
         lastLessonId = insertWithArgs(statementLesson, operationId, categoriesIds.get(mContext.getString(R.string.lesson_category_0to7)), 
@@ -533,25 +558,25 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
         // Addition - Lesson 4 - Exercises
         exerciseOrder = 0;
         insertWithArgs(statementExercise, lastLessonId,
-        		"2 + 2 + 2", ++exerciseOrder);
+        		"2 + 2 + 2", 6, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"5 + 2", ++exerciseOrder);
+        		"5 + 2", 7, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 4 + 2", ++exerciseOrder);
+        		"1 + 4 + 2", 7, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"3 + 2", ++exerciseOrder);
+        		"3 + 2", 5, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"6 + 1", ++exerciseOrder);
+        		"6 + 1", 7, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"2 + 4", ++exerciseOrder);
+        		"2 + 4", 6, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"4 + 3", ++exerciseOrder);
+        		"4 + 3", 7, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"1 + 2", ++exerciseOrder);
+        		"1 + 2", 3, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"3 + 4", ++exerciseOrder);
+        		"3 + 4", 7, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"3 + 3", ++exerciseOrder);
+        		"3 + 3", 6, ++exerciseOrder);
         
         // Addition - Lesson 5
         lastLessonId = insertWithArgs(statementLesson, operationId, categoriesIds.get(mContext.getString(R.string.lesson_category_0to10)), 
@@ -560,25 +585,25 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
         // Addition - Lesson 5 - Exercises
         exerciseOrder = 0;
         insertWithArgs(statementExercise, lastLessonId,
-        		"3 + 3", ++exerciseOrder);
+        		"3 + 3", 6, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"2 + 5", ++exerciseOrder);
+        		"2 + 5", 7, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"7 + 1", ++exerciseOrder);
+        		"7 + 1", 8, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"3 + 4", ++exerciseOrder);
+        		"3 + 4", 7, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"4 + 4", ++exerciseOrder);
+        		"4 + 4", 8, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"8 + 0", ++exerciseOrder);
+        		"8 + 0", 8, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"2 + 3", ++exerciseOrder);
+        		"2 + 3", 5, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"5 + 3", ++exerciseOrder);
+        		"5 + 3", 8, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"8 + 1", ++exerciseOrder);
+        		"8 + 1", 9, ++exerciseOrder);
         insertWithArgs(statementExercise, lastLessonId,
-        		"8 + 2", ++exerciseOrder);
+        		"8 + 2", 10, ++exerciseOrder);
         
 	}
 	
