@@ -19,5 +19,7 @@
     <string name="drag">Drag and drop</string>
     <string name="title_activity_play_exercises">Play Exercises</string>
     <string name="score">Score</string>
+    <string name="verify">Verify</string>
+    <string name="all">All</string>
     
 </resources>

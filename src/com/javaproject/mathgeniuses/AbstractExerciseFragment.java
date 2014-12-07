@@ -50,6 +50,11 @@ public abstract class AbstractExerciseFragment extends Fragment {
 		};
 	        
 	}
+	// Called when the user clicks the Verify button
+	public void onVerify(){
+		int score = calculateScore();
+        mCallback.onExerciseEnd( score );
+	}
 	
 	public void startTimer() {
 		mCountDownTimer.start();

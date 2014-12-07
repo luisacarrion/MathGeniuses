@@ -12,10 +12,12 @@ import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +42,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	private GridView mAnswerGrid;
 	private TextView mTvAnswer;
 	private GridView mGridView;
+	private Button mVerify;
 	
 	public DragAndDropExerciseFragment() {
 		// Required empty public constructor
@@ -78,6 +81,18 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		mAnswerGrid = (GridView) getActivity().findViewById(R.id.answerGrid);
 		mTvAnswer = (TextView) getActivity().findViewById(R.id.tvAnswer);
 		mGridView = (GridView) getActivity().findViewById(R.id.gridview);
+		mVerify=(Button)getActivity().findViewById(R.id.btnVerify);
+		mVerify.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0)
+			{
+				// TODO Auto-generated method stub
+				onVerify();
+				
+			}
+			
+		});
 		
 		mTvExercise.setText(mExercise);
 		mTvAnswer.setText("0");

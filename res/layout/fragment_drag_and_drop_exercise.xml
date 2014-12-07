@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView 
+    <TextView
         android:id="@+id/tvTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:textSize="25sp" />
-    
+
     <GridView
         android:id="@+id/answerGrid"
         android:layout_width="wrap_content"
@@ -57,6 +57,15 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="30dp" >
     </GridView>
+
+    <Button
+        android:id="@+id/btnVerify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gridview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/verify" />
 
     <TextView
         android:id="@+id/tvAnswer"

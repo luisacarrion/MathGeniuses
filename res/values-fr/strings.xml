@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Génies en Maths</string>
+    <string name="welcome">Jouons avec les nombres!</string>
+    <string name="selectOp">Pour commencer, choisit une opération)</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="operation_addition">Addition</string>
+    <string name="operation_subtraction">Soustraction</string>
+    <string name="operation_multiplication">Multiplication</string>
+    <string name="operation_division">Division</string>
+    <string name="operation_4_basic">4 Opérations de base</string>
+    <string name="lesson_category_0to3">entre 0 et 3</string>
+    <string name="lesson_category_0to5">entre 0 et 5</string>
+    <string name="lesson_category_0to7">entre 0 and 7</string>
+    <string name="lesson_category_0to10">entre 0 and 10</string>
+    <string name="lesson_title">Leçon</string>
+    <string name="addition">Addition</string>
+    <string name="drag">Glisser et déposer</string>
+    <string name="title_activity_play_exercises">Joue aux Exercices</string>
+    <string name="score">Points</string>
+    <string name="verify">Verifier</string>
+     <string name="all">Tous</string>
+    
+</resources>
