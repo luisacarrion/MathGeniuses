@@ -21,7 +21,7 @@
     <string name="score">Score</string>
     <string name="verify">Verify</string>
     <string name="all">All</string>
-    <string name="drag_indicator">To answer, drag and drop the finger upwards</string>
+    <string name="drag_indicator">To answer, drag and drop the object upwards</string>
     <string name="shake_indicator">To answer, shake your device</string>
 
 </resources>

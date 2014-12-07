@@ -140,7 +140,7 @@ public class ShakeExerciseFragment extends AbstractExerciseFragment implements S
 		
 	}
 
-	public static final float SHAKE_THRESHOLD = 1000;
+	public static final float SHAKE_THRESHOLD = 2000;
 	public static final float MINIMUM_ELAPSED_TIME_TO_RECEIVE_SENSOR_DATA_MILISECONDS = 100;
 	public static final float MINIMUM_ELAPSED_TIME_TO_ADD_NEW_OBJECT_MILISECONDS = 450;
 	
@@ -222,7 +222,7 @@ public class ShakeExerciseFragment extends AbstractExerciseFragment implements S
 			if (convertView == null)
 			{
 				imageView = new ImageView(mContext);
-				imageView.setLayoutParams(new GridView.LayoutParams(90, 90));
+				imageView.setLayoutParams(new GridView.LayoutParams(250, 250));
 				imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 				imageView.setPadding(8, 8, 8, 8);
 

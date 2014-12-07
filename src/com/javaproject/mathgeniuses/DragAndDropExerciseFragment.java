@@ -27,7 +27,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	
 	public static final String OPTION_IMAGE = "optionImage";
 	public static final String ANSWER_IMAGE = "answerImage";
-	
+	public static final int OBJECT_IMAGE = R.drawable.baloon_light_blue;
 	private int mCounter = 0;
 	
 	private ArrayList<Integer> mOptionImageRefs;
@@ -99,8 +99,8 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		
 		mOptionImageRefs = new ArrayList<Integer>();
 		mAnswerImageRefs = new ArrayList<Integer>();
-		populateOptionImageReferences(mScoreAwarded, R.drawable.finger);
-		populateAnswerImageReferences(0, R.drawable.finger);
+		populateOptionImageReferences(mScoreAwarded, OBJECT_IMAGE);
+		populateAnswerImageReferences(0, OBJECT_IMAGE);
 
 		mOptionImageAdapter = new ImageAdapter(getActivity(), mOptionImageRefs, OPTION_IMAGE);
 		mAnswerImageAdapter = new ImageAdapter(getActivity(), mAnswerImageRefs, ANSWER_IMAGE);
@@ -183,7 +183,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 			if (convertView == null)
 			{
 				imageView = new ImageView(mContext);
-				imageView.setLayoutParams(new GridView.LayoutParams(150, 150));
+				imageView.setLayoutParams(new ViewGroup.LayoutParams(250, 250));
 				imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 				imageView.setPadding(2, 2, 2, 2);
 
@@ -221,7 +221,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 							{
 								Log.i("MGN", "Current id: " + v.getId()
 										+ " grid: " + R.id.optionsGrid);
-								mAnswerImageRefs.add(R.drawable.finger);
+								mAnswerImageRefs.add(OBJECT_IMAGE);
 								// mGridView.refreshDrawableState();
 								mAnswerImageAdapter.notifyDataSetChanged();
 								mCounter++;

@@ -54,7 +54,7 @@
         android:layout_below="@+id/tvAnswer"
         android:layout_above="@+id/optionsGrid"
         android:layout_marginTop="5dp"
-        android:background="@color/gray_light"
+        android:background="@color/blue_ultra_light"
         android:columnWidth="40dp"
         android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"
@@ -72,10 +72,11 @@
         android:layout_marginTop="15dp"
         android:background="@color/gray_ultra_light"
         android:horizontalSpacing="10dp"
-        android:columnWidth="30dp"
+        android:verticalSpacing="10dp"
+        android:columnWidth="50dp"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp" >
+         >
     </GridView>
 
     
