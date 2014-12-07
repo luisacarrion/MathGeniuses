@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:paddingTop="6dp"
+    android:paddingBottom="4dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+     >
     <TextView 
         android:id="@+id/tvLessonName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:text=""/>
     <ProgressBar 
         android:id="@+id/progressBar"
-         android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvLessonName"
+        android:layout_alignStart="@+id/tvLessonName"
         android:layout_alignLeft="@+id/tvLessonName"
         style="?android:attr/progressBarStyleHorizontal"/>
     <RatingBar 
@@ -22,12 +29,14 @@
         style="?android:attr/ratingBarStyleSmall"
         android:layout_alignTop="@+id/tvLessonName"
         android:visibility="gone"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"/>
     <TextView 
          android:id="@+id/tvProgess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tvLessonName"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:text=""/>
     
