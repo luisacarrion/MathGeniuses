@@ -23,6 +23,7 @@ import android.view.MenuItem;
 public class PlayExercisesActivity extends Activity implements ExerciseEvents {
 	
 	public static final String KEY_LESSON_ID = "keyLessonId";
+	
 	public static final int TOTAL_NUMBER_OF_EXERCISES = 10;
 
 	private long mLessonId;
@@ -38,8 +39,9 @@ public class PlayExercisesActivity extends Activity implements ExerciseEvents {
 		Intent intent = getIntent();
 		mLessonId = intent.getLongExtra(KEY_LESSON_ID, -1);
 		
+		
 		mCurrentExercise = 0;
-		mExerciseObjectsList = getExercises(mLessonId);	
+		mExerciseObjectsList = getExercises(mLessonId);
 		
 		if (savedInstanceState == null) {
 			

@@ -223,6 +223,7 @@ public class MainActivity extends PlusBaseActivity
 		Log.d(TAG, "Lesson Category & ID selected: " + operationName + ", " + lessonCategoryId);
 		
 		intent.putExtra(LessonChoiceActivity.KEY_OPERATION_ID, lessonCategoryId);
+		intent.putExtra(LessonChoiceActivity.KEY_OPERATION_NAME, operationName);
 		startActivity(intent);
 	}
 

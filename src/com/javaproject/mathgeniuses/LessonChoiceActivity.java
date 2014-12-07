@@ -18,8 +18,10 @@ import android.widget.ListView;
 public class LessonChoiceActivity extends Activity {
 	
 	public static final String KEY_OPERATION_ID = "keyOperationId";
+	public static final String KEY_OPERATION_NAME = "keyOperationName";
 	
 	private long mOperationId;
+	private String mOperationName;
 	List<LessonObject> mLessons;
 	
 	private LessonChoiceAdapter mLessonChoiceAdapter;
@@ -35,6 +37,8 @@ public class LessonChoiceActivity extends Activity {
 		// Get data from intent
 		Intent intent = getIntent();
 		mOperationId = intent.getLongExtra(KEY_OPERATION_ID, -1);
+		mOperationName = intent.getStringExtra(KEY_OPERATION_NAME);
+		getActionBar().setTitle(mOperationName);
 		
 		// Load data in ListView
 		mLessonsList = (ListView) findViewById(R.id.listLessons);
@@ -75,6 +79,7 @@ public class LessonChoiceActivity extends Activity {
 		{
 			Intent intent = new Intent(getApplicationContext(), PlayExercisesActivity.class);
 			intent.putExtra(PlayExercisesActivity.KEY_LESSON_ID, rowId);
+			intent.putExtra(KEY_OPERATION_NAME, mOperationName);
 			startActivity(intent);
 		}
 		
