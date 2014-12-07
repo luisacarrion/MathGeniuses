@@ -91,7 +91,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		mRatingBar = (RatingBar) getActivity().findViewById(R.id.ratingBar);
 		
 		ratingStarsNumber = getActivity().getResources().getInteger(R.integer.rating_num_stars);
-		mTvExercise.setText(mExercise);
+		mTvExercise.setText(mExercise + " =");
 		mTvAnswer.setText("0");
 		mRatingBar.setRating(mScoreObtained / mScoreAwarded * ratingStarsNumber);
 		// The score will be recalculated at the end of the activity, so it should be 0 at the start (in case the user doesn't give the correct answer)
@@ -99,7 +99,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		
 		mOptionImageRefs = new ArrayList<Integer>();
 		mAnswerImageRefs = new ArrayList<Integer>();
-		populateOptionImageReferences(10, R.drawable.finger);
+		populateOptionImageReferences(mScoreAwarded, R.drawable.finger);
 		populateAnswerImageReferences(0, R.drawable.finger);
 
 		mOptionImageAdapter = new ImageAdapter(getActivity(), mOptionImageRefs, OPTION_IMAGE);
@@ -225,6 +225,9 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 								// mGridView.refreshDrawableState();
 								mAnswerImageAdapter.notifyDataSetChanged();
 								mCounter++;
+								// Just remove one, it doesn't matter that it's the first one
+								mOptionImageRefs.remove(0);
+								mOptionImageAdapter.notifyDataSetChanged();
 								mTvAnswer.setText(String.valueOf(mCounter));
 
 							}

@@ -37,11 +37,22 @@
         android:layout_marginTop="5dp"
         android:textSize="25sp" />
 
+    <TextView
+        android:id="@+id/tvAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExercise"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:text="0"
+        android:textSize="25sp" />
+    
     <GridView
         android:id="@+id/answerGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvExercise"
+        android:layout_below="@+id/tvAnswer"
+        android:layout_above="@+id/optionsGrid"
         android:layout_marginTop="5dp"
         android:background="@color/gray_light"
         android:columnWidth="40dp"
@@ -51,22 +62,13 @@
         android:verticalSpacing="50dp" >
     </GridView>
     
-    <TextView
-        android:id="@+id/tvAnswer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/answerGrid"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="15dp"
-        android:text="0"
-        android:textSize="25sp" />
 
     <GridView
         android:id="@+id/optionsGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvAnswer"
+        android:layout_above="@+id/btnVerify"
         android:layout_marginTop="15dp"
         android:background="@color/gray_ultra_light"
         android:horizontalSpacing="10dp"
@@ -81,19 +83,19 @@
         android:id="@+id/btnVerify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/optionsGrid"
+        android:layout_above="@+id/tvIndication"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:text="@string/verify" />
+    
     <TextView 
         android:id="@+id/tvIndication"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnVerify"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="15dp"
-        android:textColor="#2B547E"
-        android:textSize="20dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/drag_indicator"/>
 
     

@@ -22,5 +22,6 @@
     <string name="verify">verificador</string>
     <string name="all">Todos</string>
     <string name="drag_indicator">Para contestar, arrastre y suelte el dedo hacia arriba</string>
+    <string name="shake_indicator">Para contestar, agita el dispositivo</string>
 
 </resources>
