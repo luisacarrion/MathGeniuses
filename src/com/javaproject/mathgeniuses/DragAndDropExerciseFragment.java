@@ -20,15 +20,15 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	
-	private String mExercise;
-	private int mAnswer;
-	private int mScoreAwarded;
-	private long mLessonId;
+	private int ratingStarsNumber;
+	
+	
 	private int mCounter = 0;
 	
 	private ArrayList<Integer> mImageRefs;
@@ -42,7 +42,11 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	private GridView mAnswerGrid;
 	private TextView mTvAnswer;
 	private GridView mGridView;
+<<<<<<< HEAD
 	private Button mVerify;
+=======
+	private RatingBar mRatingBar;
+>>>>>>> 4ef9d371435e1b13d83c5b7ac1d7100af446fe35
 	
 	public DragAndDropExerciseFragment() {
 		// Required empty public constructor
@@ -56,6 +60,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
         if (args != null) {
         	mExercise = args.getString(AbstractExerciseFragment.KEY_EXERCISE);
         	mScoreAwarded = args.getInt(AbstractExerciseFragment.KEY_SCORE_AWARDED);
+        	mScoreObtained = args.getInt(AbstractExerciseFragment.KEY_SCORE_OBTAINED);
         	mAnswer = args.getInt(AbstractExerciseFragment.KEY_ANSWER);
         }
     }
@@ -81,6 +86,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		mAnswerGrid = (GridView) getActivity().findViewById(R.id.answerGrid);
 		mTvAnswer = (TextView) getActivity().findViewById(R.id.tvAnswer);
 		mGridView = (GridView) getActivity().findViewById(R.id.gridview);
+<<<<<<< HEAD
 		mVerify=(Button)getActivity().findViewById(R.id.btnVerify);
 		mVerify.setOnClickListener(new OnClickListener(){
 
@@ -93,9 +99,14 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 			}
 			
 		});
+=======
+		mRatingBar = (RatingBar) getActivity().findViewById(R.id.ratingBar);
+>>>>>>> 4ef9d371435e1b13d83c5b7ac1d7100af446fe35
 		
+		ratingStarsNumber = getActivity().getResources().getInteger(R.integer.rating_num_stars);
 		mTvExercise.setText(mExercise);
 		mTvAnswer.setText("0");
+		mRatingBar.setRating(mScoreObtained / mScoreAwarded * ratingStarsNumber);
 		
 		mImageRefs = new ArrayList<Integer>();
 		mAnswerImageRefs = new ArrayList<Integer>();
@@ -120,12 +131,11 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	
 	@Override
 	public int calculateScore() {
-		int score = 0;
 		int answer = Integer.parseInt( mTvAnswer.getText().toString() );
 		if (answer == mAnswer) {
-			score = mScoreAwarded;
+			mScoreObtained = mScoreAwarded;
 		}
-		return score;
+		return mScoreObtained;
 	}
 	
 	private void populate(int n, int drawable)

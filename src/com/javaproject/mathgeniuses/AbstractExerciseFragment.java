@@ -1,5 +1,7 @@
 package com.javaproject.mathgeniuses;
 
+import com.javaproject.mathgeniuses.util.DialogsHelper;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.CountDownTimer;
@@ -10,6 +12,13 @@ public abstract class AbstractExerciseFragment extends Fragment {
 	public static final String KEY_EXERCISE = "keyExercise";
 	public static final String KEY_ANSWER = "keyAnswer";
 	public static final String KEY_SCORE_AWARDED = "keyScoreAwarded";
+	public static final String KEY_SCORE_OBTAINED = "keyScoreObtained";
+	
+	protected String mExercise;
+	protected int mAnswer;
+	protected int mScoreAwarded;
+	protected int mScoreObtained;
+	protected long mLessonId;
 	
 	private CountDownTimer mCountDownTimer;
 	protected ExerciseEvents mCallback;
@@ -44,8 +53,8 @@ public abstract class AbstractExerciseFragment extends Fragment {
 
             public void onFinish() {
                 mTvTimer.setText("00:00");
-                int score = calculateScore();
-                mCallback.onExerciseEnd( score );
+                mCallback.onExerciseEnd( calculateScore() );
+                showExerciseScore();
             }
 		};
 	        
@@ -62,6 +71,11 @@ public abstract class AbstractExerciseFragment extends Fragment {
 	
 	public void stopTimer() {
 		mCountDownTimer.cancel();
+	}
+	
+	public void showExerciseScore() {
+		DialogsHelper toast = new DialogsHelper((Activity) mCallback);
+		toast.showToast("+" + mScoreObtained);
 	}
 	
 	public abstract int calculateScore();

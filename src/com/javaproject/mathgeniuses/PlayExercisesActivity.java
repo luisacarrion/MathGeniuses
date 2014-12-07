@@ -135,6 +135,8 @@ public class PlayExercisesActivity extends Activity implements ExerciseEvents {
         		mExerciseObjectsList.get(mCurrentExercise).getAnswer());
         args.putInt(AbstractExerciseFragment.KEY_SCORE_AWARDED, 
         		LessonObject.getScoreAwarded(new MathGeniusesDbAdapter(this), mLessonId));
+        args.putInt(AbstractExerciseFragment.KEY_SCORE_OBTAINED, 
+        		mExerciseObjectsList.get(mCurrentExercise).getScoreObtained());
         fragmentToReturn.setArguments(args);
 		
 		return fragmentToReturn;
