@@ -9,7 +9,7 @@ Setting the Environment
 To build the app we used:
 
 - Eclipse with Android plugin, installed from http://developer.android.com/sdk/index.html
-- You should have installed at leas the SDK for API level 11
+- You should have installed at least the SDK for API level 11
 - Google Play Services Library, installed from the SDK manager, it can be found in the Extras directory
  - In order to use Google Play Services with your app, you have to generate a key in the Google developers site, as explained here: [Start integrating Google+ into your Android app](https://developers.google.com/+/mobile/android/getting-started) and here: [Google+ Sign-in for Android](https://developers.google.com/+/mobile/android/sign-in). If you don't follow these steps, you won't be able to login into the app, since Google+ is the only mechanism provided so far for login.
 - appcompat_v7 library, included by default by the IDE
