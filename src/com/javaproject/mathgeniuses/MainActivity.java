@@ -56,8 +56,8 @@ public class MainActivity extends PlusBaseActivity
 
 		// Reconnect with the user's account to obtain the user's name
 		// This does the callback to onPlusClientSignIn()
-		// TODO: skip sign in for now (remove it later)
-		//signIn();
+		
+		signIn();
 
 	}
 

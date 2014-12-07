@@ -3,27 +3,22 @@ package com.javaproject.mathgeniuses;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnDragListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ShakeExerciseFragment extends AbstractExerciseFragment implements SensorEventListener {
@@ -33,10 +28,8 @@ public class ShakeExerciseFragment extends AbstractExerciseFragment implements S
 	
 	private int mCounter = 0;
 	
-	private ArrayList<Integer> mOptionImageRefs;
 	private ArrayList<Integer> mAnswerImageRefs;
 	
-	private ImageAdapter mOptionImageAdapter;
 	private ImageAdapter mAnswerImageAdapter;
 
 	public ShakeExerciseFragment() {
@@ -79,6 +72,17 @@ public class ShakeExerciseFragment extends AbstractExerciseFragment implements S
 		mTvAnswer = (TextView) getActivity().findViewById(R.id.tvAnswer);
 		mRatingBar = (RatingBar) getActivity().findViewById(R.id.ratingBar);
 		mAnswerGrid = (GridView) getActivity().findViewById(R.id.answerGrid);
+		
+		mVerify = (Button)getActivity().findViewById(R.id.btnVerify);
+		mVerify.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0)
+			{
+				onVerify();
+			}
+			
+		});
 		
 		ratingStarsNumber = getActivity().getResources().getInteger(R.integer.rating_num_stars);
 		mTvExercise.setText(mExercise);
@@ -147,7 +151,6 @@ public class ShakeExerciseFragment extends AbstractExerciseFragment implements S
 	float last_z = 0;
 	@Override
 	public void onSensorChanged(SensorEvent sensorEvent) {
-		Sensor sensor = sensorEvent.sensor;
 		float[] values = sensorEvent.values;
 		
 		    long curTime = System.currentTimeMillis();

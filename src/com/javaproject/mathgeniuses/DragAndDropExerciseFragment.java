@@ -12,15 +12,16 @@ import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	
@@ -75,6 +76,18 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		mAnswerGrid = (GridView) getActivity().findViewById(R.id.answerGrid);
 		mTvAnswer = (TextView) getActivity().findViewById(R.id.tvAnswer);
 		mOptionsGridView = (GridView) getActivity().findViewById(R.id.optionsGrid);
+
+		mVerify = (Button)getActivity().findViewById(R.id.btnVerify);
+		mVerify.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0)
+			{
+				onVerify();
+			}
+			
+		});
+
 		mRatingBar = (RatingBar) getActivity().findViewById(R.id.ratingBar);
 		
 		ratingStarsNumber = getActivity().getResources().getInteger(R.integer.rating_num_stars);
@@ -170,9 +183,9 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 			if (convertView == null)
 			{
 				imageView = new ImageView(mContext);
-				imageView.setLayoutParams(new GridView.LayoutParams(90, 90));
+				imageView.setLayoutParams(new GridView.LayoutParams(150, 150));
 				imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-				imageView.setPadding(8, 8, 8, 8);
+				imageView.setPadding(2, 2, 2, 2);
 
 			} else
 			{

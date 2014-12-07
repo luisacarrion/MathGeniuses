@@ -62,6 +62,6 @@
         android:id="@+id/btnAll"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="All" />
+        android:text="@string/all" />
 
 </LinearLayout>
