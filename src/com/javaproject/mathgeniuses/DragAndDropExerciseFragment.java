@@ -24,23 +24,18 @@ import android.widget.Toast;
 
 public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	
-	private int ratingStarsNumber;
-	
+	public static final String OPTION_IMAGE = "optionImage";
+	public static final String ANSWER_IMAGE = "answerImage";
 	
 	private int mCounter = 0;
 	
-	private ArrayList<Integer> mImageRefs;
+	private ArrayList<Integer> mOptionImageRefs;
 	private ArrayList<Integer> mAnswerImageRefs;
 	
-	private ImageAdapter mImageAdapter;
+	private ImageAdapter mOptionImageAdapter;
 	private ImageAdapter mAnswerImageAdapter;
 	
-	private TextView mTvTimer;
-	private TextView mTvExercise;
-	private GridView mAnswerGrid;
-	private TextView mTvAnswer;
-	private GridView mGridView;
-	private RatingBar mRatingBar;
+	private GridView mOptionsGridView;
 	
 	public DragAndDropExerciseFragment() {
 		// Required empty public constructor
@@ -79,23 +74,25 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		mTvExercise = (TextView) getActivity().findViewById(R.id.tvExercise);
 		mAnswerGrid = (GridView) getActivity().findViewById(R.id.answerGrid);
 		mTvAnswer = (TextView) getActivity().findViewById(R.id.tvAnswer);
-		mGridView = (GridView) getActivity().findViewById(R.id.gridview);
+		mOptionsGridView = (GridView) getActivity().findViewById(R.id.optionsGrid);
 		mRatingBar = (RatingBar) getActivity().findViewById(R.id.ratingBar);
 		
 		ratingStarsNumber = getActivity().getResources().getInteger(R.integer.rating_num_stars);
 		mTvExercise.setText(mExercise);
 		mTvAnswer.setText("0");
 		mRatingBar.setRating(mScoreObtained / mScoreAwarded * ratingStarsNumber);
+		// The score will be recalculated at the end of the activity, so it should be 0 at the start (in case the user doesn't give the correct answer)
+		mScoreObtained = 0;
 		
-		mImageRefs = new ArrayList<Integer>();
+		mOptionImageRefs = new ArrayList<Integer>();
 		mAnswerImageRefs = new ArrayList<Integer>();
-		populate(10, R.drawable.finger);
-		populateResponseGrid(0, R.drawable.finger);
+		populateOptionImageReferences(10, R.drawable.finger);
+		populateAnswerImageReferences(0, R.drawable.finger);
 
-		mImageAdapter = new ImageAdapter(getActivity(), mImageRefs, "set");
-		mAnswerImageAdapter = new ImageAdapter(getActivity(), mAnswerImageRefs, "");
+		mOptionImageAdapter = new ImageAdapter(getActivity(), mOptionImageRefs, OPTION_IMAGE);
+		mAnswerImageAdapter = new ImageAdapter(getActivity(), mAnswerImageRefs, ANSWER_IMAGE);
 
-		mGridView.setAdapter(mImageAdapter);
+		mOptionsGridView.setAdapter(mOptionImageAdapter);
 		mAnswerGrid.setAdapter(mAnswerImageAdapter);
 
 		setTimer(mTvTimer);
@@ -117,15 +114,15 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		return mScoreObtained;
 	}
 	
-	private void populate(int n, int drawable)
+	private void populateOptionImageReferences(int n, int drawable)
 	{
 		for (int i = 0; i < n; i++)
 		{
-			mImageRefs.add(drawable);
+			mOptionImageRefs.add(drawable);
 		}
 	}
 
-	private void populateResponseGrid(int n, int drawable)
+	private void populateAnswerImageReferences(int n, int drawable)
 	{
 		for (int i = 0; i < n; i++)
 		{
@@ -151,51 +148,47 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		@Override
 		public int getCount()
 		{
-			// TODO Auto-generated method stub
 			return mRefs.size();
 		}
 
 		@Override
 		public Object getItem(int position)
 		{
-			// TODO Auto-generated method stub
 			return position;
 		}
 
 		@Override
 		public long getItemId(int id)
 		{
-			// TODO Auto-generated method stub
 			return id;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent)
 		{
-			// TODO Auto-generated method stub
 			ImageView imageView;
 			if (convertView == null)
 			{
 				imageView = new ImageView(mContext);
 				imageView.setLayoutParams(new GridView.LayoutParams(90, 90));
-				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+				imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 				imageView.setPadding(8, 8, 8, 8);
 
 			} else
 			{
 				imageView = (ImageView) convertView;
 			}
+			
 			imageView.setImageResource(mRefs.get(position));
-			if (mType.equals("set"))
+			
+			if (mType.equals(OPTION_IMAGE))
 			{
 				imageView.setOnTouchListener(new TouchListener());
 				imageView.setOnDragListener(new OnDragListener()
 				{
-
 					@Override
 					public boolean onDrag(View v, DragEvent event)
 					{
-						// TODO Auto-generated method stub
 						switch (event.getAction())
 						{
 						case DragEvent.ACTION_DRAG_STARTED:
@@ -211,10 +204,10 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 						case DragEvent.ACTION_DRAG_EXITED:
 							Log.d("MGN",
 									"Action is DragEvent.ACTION_DRAG_EXITED");
-							if (v.getId() != R.id.gridview)
+							if (v.getId() != R.id.optionsGrid)
 							{
 								Log.i("MGN", "Current id: " + v.getId()
-										+ " grid: " + R.id.gridview);
+										+ " grid: " + R.id.optionsGrid);
 								mAnswerImageRefs.add(R.drawable.finger);
 								// mGridView.refreshDrawableState();
 								mAnswerImageAdapter.notifyDataSetChanged();
@@ -259,7 +252,6 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		@Override
 		public boolean onTouch(View view, MotionEvent event)
 		{
-			// TODO Auto-generated method stub
 			ClipData.Item item = new ClipData.Item((CharSequence) view.getTag());
 
 			String[] mimeType =

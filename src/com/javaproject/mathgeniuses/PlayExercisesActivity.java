@@ -126,7 +126,13 @@ public class PlayExercisesActivity extends Activity implements ExerciseEvents {
 	private AbstractExerciseFragment getNewExerciseFragment() {
 		AbstractExerciseFragment fragmentToReturn;
 		
-		fragmentToReturn = new DragAndDropExerciseFragment();
+		if (mCurrentExercise % 2 == 0) {
+			fragmentToReturn = new DragAndDropExerciseFragment();
+		} else {
+			fragmentToReturn = new ShakeExerciseFragment();
+		}
+		
+		
 		
 		Bundle args = new Bundle();
         args.putString(AbstractExerciseFragment.KEY_EXERCISE, 

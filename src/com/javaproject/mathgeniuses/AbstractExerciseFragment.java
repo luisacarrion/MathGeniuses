@@ -5,6 +5,9 @@ import com.javaproject.mathgeniuses.util.DialogsHelper;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.CountDownTimer;
+import android.widget.GridView;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public abstract class AbstractExerciseFragment extends Fragment {
@@ -14,6 +17,7 @@ public abstract class AbstractExerciseFragment extends Fragment {
 	public static final String KEY_SCORE_AWARDED = "keyScoreAwarded";
 	public static final String KEY_SCORE_OBTAINED = "keyScoreObtained";
 	
+	protected int ratingStarsNumber;
 	protected String mExercise;
 	protected int mAnswer;
 	protected int mScoreAwarded;
@@ -23,7 +27,12 @@ public abstract class AbstractExerciseFragment extends Fragment {
 	private CountDownTimer mCountDownTimer;
 	protected ExerciseEvents mCallback;
 	
-	TextView mTvTimer;
+	protected TextView mTvTimer;
+	protected TextView mTvExercise;
+	protected TextView mTvAnswer;
+	protected RatingBar mRatingBar;
+	protected GridView mAnswerGrid;
+	
 	
 	public void setActivityCallback(Activity activity) {
 		try {

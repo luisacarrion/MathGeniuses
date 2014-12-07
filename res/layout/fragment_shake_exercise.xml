@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tvTimer"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/drag_and_drop_icon" />
+        android:src="@drawable/shake_icon" />
     
     <TextView
         android:id="@+id/tvExercise"
@@ -37,46 +37,33 @@
         android:layout_marginTop="5dp"
         android:textSize="25sp" />
     
-    <GridView
-        android:id="@+id/answerGrid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvExercise"
-        android:layout_marginTop="5dp"
-        android:background="#808080"
-        android:columnWidth="40dp"
-        android:horizontalSpacing="10dp"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="50dp" >
-    </GridView>
-
-    <GridView
-        android:id="@+id/optionsGrid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/answerGrid"
-        android:layout_marginTop="100dp"
-        android:background="#f3f3f3"
-        android:columnWidth="40dp"
-        android:horizontalSpacing="10dp"
-        android:numColumns="auto_fit"
-        android:padding="50dp"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="30dp" >
-    </GridView>
+    
 
     <TextView
         android:id="@+id/tvAnswer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/answerGrid"
+        android:layout_below="@+id/tvExercise"
         android:layout_centerHorizontal="true"
         android:layout_margin="15dp"
         android:text="0"
         android:textSize="25sp" />
 
-
+    <GridView
+        android:id="@+id/answerGrid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvAnswer"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/gray_light"
+        android:columnWidth="40dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:horizontalSpacing="5dp"
+        android:verticalSpacing="5dp" >
+    </GridView>
 
 </RelativeLayout>
