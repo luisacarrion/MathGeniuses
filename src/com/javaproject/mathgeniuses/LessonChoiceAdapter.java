@@ -25,6 +25,10 @@ public class LessonChoiceAdapter extends BaseAdapter {
 		mInflater = LayoutInflater.from(context);
 		mContext = context;
 	}
+	
+	public void setDataSource(List<LessonObject> lessons) {
+		mLessons = lessons;
+	}
 
 	@Override
 	public int getCount()

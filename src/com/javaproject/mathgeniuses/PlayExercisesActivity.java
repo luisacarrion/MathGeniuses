@@ -92,7 +92,11 @@ public class PlayExercisesActivity extends Activity implements ExerciseEvents {
 	 */
 	@Override
 	public void onExerciseEnd(int scoreObtained) {
-		mExerciseObjectsList.get(mCurrentExercise).setScoreObtained(scoreObtained);
+		// Save obtained score in the ExerciseObject
+		ExerciseObject exercise = mExerciseObjectsList.get(mCurrentExercise);
+		exercise.setScoreObtained(scoreObtained);
+		// Save obtained score in the database
+		saveExerciseScore(exercise.getId(), scoreObtained);
 		
 		if (!exercisesCompleted()) {
 			// Exercises not completed, so move on to the next exercise
@@ -112,6 +116,10 @@ public class PlayExercisesActivity extends Activity implements ExerciseEvents {
 			
 			DialogsHelper toast = new DialogsHelper(this);
 			toast.showToast("Score: " + totalScore);
+			
+			// Save lesson score in the database
+			saveLessonScore(mLessonId, totalScore);
+			
 		}
 	}
 	
@@ -134,6 +142,20 @@ public class PlayExercisesActivity extends Activity implements ExerciseEvents {
 	
 	private boolean exercisesCompleted() {
 		return (mCurrentExercise == TOTAL_NUMBER_OF_EXERCISES - 1);
+	}
+	
+	private void saveExerciseScore(long id, int score) {
+		MathGeniusesDbAdapter mathAdapter = new MathGeniusesDbAdapter(this);
+		mathAdapter.open();
+		mathAdapter.saveExerciseScore(id, score);
+		mathAdapter.close();
+	}
+	
+	private void saveLessonScore(long id, int score) {
+		MathGeniusesDbAdapter mathAdapter = new MathGeniusesDbAdapter(this);
+		mathAdapter.open();
+		mathAdapter.saveLessonScore(id, score);
+		mathAdapter.close();
 	}
 
 }

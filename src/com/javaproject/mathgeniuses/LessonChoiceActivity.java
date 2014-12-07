@@ -20,6 +20,10 @@ public class LessonChoiceActivity extends Activity {
 	public static final String KEY_OPERATION_ID = "keyOperationId";
 	
 	private long mOperationId;
+	List<LessonObject> mLessons;
+	
+	private LessonChoiceAdapter mLessonChoiceAdapter;
+	
 	private ListView mLessonsList;
 	
 	@Override
@@ -34,12 +38,22 @@ public class LessonChoiceActivity extends Activity {
 		
 		// Load data in ListView
 		mLessonsList = (ListView) findViewById(R.id.listLessons);
-		List<LessonObject> lessons = getLessons();
-		mLessonsList.setAdapter(new LessonChoiceAdapter(this,lessons));
+		mLessons = getLessons();
+		mLessonChoiceAdapter = new LessonChoiceAdapter(this,mLessons);
+		mLessonsList.setAdapter(mLessonChoiceAdapter);
 		mLessonsList.setOnItemClickListener((new LessonsListListener()));
 
 	}
 
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		// Refresh lessons, so if the user practiced new exercises, the progress can be seen
+		mLessons = getLessons();
+		mLessonChoiceAdapter.setDataSource(mLessons);
+		mLessonChoiceAdapter.notifyDataSetChanged();
+	}
+	
 	// Getting the list of lessons available in the database
 	private List<LessonObject> getLessons()
 	{

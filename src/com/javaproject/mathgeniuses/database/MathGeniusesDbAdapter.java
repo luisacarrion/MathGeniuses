@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -332,6 +333,52 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
         results.close();
     	
     	return scoreAwarded;
+    }
+    
+    public void saveExerciseScore(long id, int score) {
+    	ContentValues values = new ContentValues();
+    	values.put(ExerciseScore.COLUMN_NAME_EXERCISE_ID, id);
+    	values.put(ExerciseScore.COLUMN_NAME_SCORE, score);
+
+    	// TODO: add argument for the user
+    	String selection = ExerciseScore.COLUMN_NAME_EXERCISE_ID + " = ?";
+    	String[] selectionArgs = { String.valueOf(id) };
+
+    	int affectedRows = mDb.update(
+    			ExerciseScore.TABLE_NAME,
+	    	    values,
+	    	    selection,
+	    	    selectionArgs);
+    	
+    	if (affectedRows == 0) {
+    		mDb.insert(
+    				ExerciseScore.TABLE_NAME,
+    				null,
+		    	    values);
+    	}
+    }
+    
+    public void saveLessonScore(long id, int score) {
+    	ContentValues values = new ContentValues();
+    	values.put(LessonScore.COLUMN_NAME_LESSON_ID, id);
+    	values.put(LessonScore.COLUMN_NAME_SCORE, score);
+
+    	// TODO: add argument for the user
+    	String selection = LessonScore.COLUMN_NAME_LESSON_ID + " = ?";
+    	String[] selectionArgs = { String.valueOf(id) };
+
+    	int affectedRows = mDb.update(
+    			LessonScore.TABLE_NAME,
+	    	    values,
+	    	    selection,
+	    	    selectionArgs);
+    	
+    	if (affectedRows == 0) {
+    		mDb.insert(
+    				LessonScore.TABLE_NAME,
+    				null,
+		    	    values);
+    	}
     }
     
     public void bulkInsertCatalogs() {
