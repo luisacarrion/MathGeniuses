@@ -42,11 +42,11 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	private GridView mAnswerGrid;
 	private TextView mTvAnswer;
 	private GridView mGridView;
-<<<<<<< HEAD
+
 	private Button mVerify;
-=======
+
 	private RatingBar mRatingBar;
->>>>>>> 4ef9d371435e1b13d83c5b7ac1d7100af446fe35
+
 	
 	public DragAndDropExerciseFragment() {
 		// Required empty public constructor
@@ -86,7 +86,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		mAnswerGrid = (GridView) getActivity().findViewById(R.id.answerGrid);
 		mTvAnswer = (TextView) getActivity().findViewById(R.id.tvAnswer);
 		mGridView = (GridView) getActivity().findViewById(R.id.gridview);
-<<<<<<< HEAD
+
 		mVerify=(Button)getActivity().findViewById(R.id.btnVerify);
 		mVerify.setOnClickListener(new OnClickListener(){
 
@@ -99,9 +99,9 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 			}
 			
 		});
-=======
+
 		mRatingBar = (RatingBar) getActivity().findViewById(R.id.ratingBar);
->>>>>>> 4ef9d371435e1b13d83c5b7ac1d7100af446fe35
+
 		
 		ratingStarsNumber = getActivity().getResources().getInteger(R.integer.rating_num_stars);
 		mTvExercise.setText(mExercise);
