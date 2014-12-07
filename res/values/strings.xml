@@ -17,7 +17,7 @@
     <string name="lesson_title">Lesson</string>
     <string name="addition">Addition</string>
     <string name="drag">Drag and drop</string>
-    <string name="title_activity_play_exercises">PlayExercisesActivity</string>
-    <string name="hello_world">Hello world!</string>
-
+    <string name="title_activity_play_exercises">Play Exercises</string>
+    <string name="score">Score</string>
+    
 </resources>

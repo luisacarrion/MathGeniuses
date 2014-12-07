@@ -115,7 +115,7 @@ public class PlayExercisesActivity extends Activity implements ExerciseEvents {
 			}
 			
 			DialogsHelper toast = new DialogsHelper(this);
-			toast.showToast("Score: " + totalScore);
+			toast.showToast(getResources().getString(R.string.score) + " " + totalScore);
 			
 			// Save lesson score in the database
 			saveLessonScore(mLessonId, totalScore);

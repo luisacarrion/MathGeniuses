@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Genios de las Matemáticas</string>
+    <string name="welcome">Juguemos con los números!</string>
+    <string name="selectOp">Para empezar, selecciona una operación</string>
+    <string name="action_settings">Configuraciones</string>
+    <string name="operation_addition">Suma</string>
+    <string name="operation_subtraction">Resta</string>
+    <string name="operation_multiplication">Multiplicación</string>
+    <string name="operation_division">División</string>
+    <string name="operation_4_basic">4 Operaciones Básicas</string>
+    <string name="lesson_category_0to3">entre 0 y 3</string>
+    <string name="lesson_category_0to5">entre 0 y 5</string>
+    <string name="lesson_category_0to7">entre 0 y 7</string>
+    <string name="lesson_category_0to10">entre 0 y 10</string>
+    <string name="lesson_title">Lección</string>
+    <string name="addition">Suma</string>
+    <string name="drag">Arrastrar y soltar</string>
+    <string name="title_activity_play_exercises">Jugando con los Ejercicios</string>
+    <string name="score">Puntaje</string>
+</resources>
