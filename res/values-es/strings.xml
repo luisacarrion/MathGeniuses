@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Genios de las Matemáticas</string>
     <string name="welcome">Juguemos con los números!</string>
     <string name="selectOp">Para empezar, selecciona una operación</string>
@@ -20,5 +21,6 @@
     <string name="score">Puntaje</string>
     <string name="verify">verificador</string>
     <string name="all">Todos</string>
-    
+    <string name="drag_indicator">Para contestar, arrastre y suelte el dedo hacia arriba</string>
+
 </resources>
