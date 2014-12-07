@@ -70,15 +70,8 @@ public class LoginActivity extends PlusBaseActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		
-		
-		//Skip login for now		
-		Intent intent = new Intent(this, MainActivity.class);
-		startActivity(intent);
-		
-		
-		
-		
+			
+			
 		// Find the Google+ sign in button.
 		mPlusSignInButton = (SignInButton) findViewById(R.id.plus_sign_in_button);
 		if (supportsGooglePlayServices()) {
