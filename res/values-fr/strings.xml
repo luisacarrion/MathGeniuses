@@ -21,6 +21,7 @@
     <string name="score">Points</string>
     <string name="verify">Vérifier</string>
     <string name="all">Tous</string>
-    <string name="drag_indicator">Pour répondre, glissez et déposez le doigt vers le haut </string>
+    <string name="drag_indicator">Pour répondre, glissez et déposez l\'object vers le haut </string>
+    <string name="shake_indicator">Pour répondre, secouez votre appareil</string>
 
 </resources>
