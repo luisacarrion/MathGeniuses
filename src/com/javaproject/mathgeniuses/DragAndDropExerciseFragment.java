@@ -107,7 +107,8 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 
 		mOptionsGridView.setAdapter(mOptionImageAdapter);
 		mAnswerGrid.setAdapter(mAnswerImageAdapter);
-
+		mAnswerGrid.setOnDragListener(new DragListener());
+		
 		setTimer(mTvTimer);
 		startTimer();
 	}
@@ -197,69 +198,73 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 			if (mType.equals(OPTION_IMAGE))
 			{
 				imageView.setOnTouchListener(new TouchListener());
-				imageView.setOnDragListener(new OnDragListener()
-				{
-					@Override
-					public boolean onDrag(View v, DragEvent event)
-					{
-						switch (event.getAction())
-						{
-						case DragEvent.ACTION_DRAG_STARTED:
-
-							Log.i("MGN",
-									"Action is DragEvent.ACTION_DRAG_STARTED");
-							// Do nothing
-							break;
-						case DragEvent.ACTION_DRAG_ENTERED:
-							Log.d("MGN",
-									"Action is DragEvent.ACTION_DRAG_ENTERED");
-							break;
-						case DragEvent.ACTION_DRAG_EXITED:
-							Log.d("MGN",
-									"Action is DragEvent.ACTION_DRAG_EXITED");
-							if (v.getId() != R.id.optionsGrid)
-							{
-								Log.i("MGN", "Current id: " + v.getId()
-										+ " grid: " + R.id.optionsGrid);
-								mAnswerImageRefs.add(OBJECT_IMAGE);
-								// mGridView.refreshDrawableState();
-								mAnswerImageAdapter.notifyDataSetChanged();
-								mCounter++;
-								// Just remove one, it doesn't matter that it's the first one
-								mOptionImageRefs.remove(0);
-								mOptionImageAdapter.notifyDataSetChanged();
-								mTvAnswer.setText(String.valueOf(mCounter));
-
-							}
-							break;
-						case DragEvent.ACTION_DRAG_LOCATION:
-							Log.d("MGN",
-									"Action is DragEvent.ACTION_DRAG_LOCATION");
-							break;
-						case DragEvent.ACTION_DRAG_ENDED:
-							Log.d("MGN",
-									"Action is DragEvent.ACTION_DRAG_ENDED");
-							// Do nothing
-
-							break;
-						case DragEvent.ACTION_DROP:
-							Log.d("MGN", "ACTION_DROP event");
-							// Do nothing
-							Log.i("MGEN",
-									"Dragged and Dropped in the answer view!");
-							break;
-						default:
-							break;
-						}
-						return true;
-					}
-
-				});
+				imageView.setOnDragListener(new DragListener());
 
 			}
 			return imageView;
 		}
 
+	}
+	
+	private class DragListener implements View.OnDragListener {
+
+		@Override
+		public boolean onDrag(View v, DragEvent event)
+		{
+			switch (event.getAction())
+			{
+			case DragEvent.ACTION_DRAG_STARTED:
+
+				Log.i("MGN",
+						"Action is DragEvent.ACTION_DRAG_STARTED");
+				// Do nothing
+				break;
+			case DragEvent.ACTION_DRAG_ENTERED:
+				Log.d("MGN",
+						"Action is DragEvent.ACTION_DRAG_ENTERED");
+				break;
+			case DragEvent.ACTION_DRAG_EXITED:
+				Log.d("MGN",
+						"Action is DragEvent.ACTION_DRAG_EXITED");
+				
+				break;
+			case DragEvent.ACTION_DRAG_LOCATION:
+				Log.d("MGN",
+						"Action is DragEvent.ACTION_DRAG_LOCATION");
+				break;
+			case DragEvent.ACTION_DRAG_ENDED:
+				Log.d("MGN",
+						"Action is DragEvent.ACTION_DRAG_ENDED");
+				
+
+				break;
+			case DragEvent.ACTION_DROP:
+				Log.d("MGN", "ACTION_DROP event");
+				Log.d("MGN", "ACTION_DRAG_ENDED id:" + v.getId());
+				Log.d("MGN", "ACTION_DRAG_ENDED R.id.answerGrid:" + R.id.answerGrid);
+				if (v.getId() == R.id.answerGrid)
+				{
+					Log.i("MGN", "Current id: " + v.getId()
+							+ " grid: " + R.id.optionsGrid);
+					mAnswerImageRefs.add(OBJECT_IMAGE);
+					// mGridView.refreshDrawableState();
+					mAnswerImageAdapter.notifyDataSetChanged();
+					mCounter++;
+					// Just remove one, it doesn't matter that it's the first one
+					mOptionImageRefs.remove(0);
+					mOptionImageAdapter.notifyDataSetChanged();
+					mTvAnswer.setText(String.valueOf(mCounter));
+
+				}
+				Log.i("MGEN",
+						"Dragged and Dropped in the answer view!");
+				break;
+			default:
+				break;
+			}
+			return true;
+		}
+		
 	}
 
 	private class TouchListener implements View.OnTouchListener
