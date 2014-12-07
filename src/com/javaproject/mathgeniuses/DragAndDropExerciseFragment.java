@@ -27,7 +27,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	
 	public static final String OPTION_IMAGE = "optionImage";
 	public static final String ANSWER_IMAGE = "answerImage";
-	public static final int OBJECT_IMAGE = R.drawable.baloon_light_blue;
+	public static final int OBJECT_IMAGE = R.drawable.ballon_small_light_blue;
 	private int mCounter = 0;
 	
 	private ArrayList<Integer> mOptionImageRefs;
