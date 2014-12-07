@@ -10,6 +10,7 @@ public abstract class AbstractExerciseFragment extends Fragment {
 	public static final String KEY_EXERCISE = "keyExercise";
 	public static final String KEY_ANSWER = "keyAnswer";
 	public static final String KEY_SCORE_AWARDED = "keyScoreAwarded";
+	public static final String KEY_SCORE_OBTAINED = "keyScoreObtained";
 	
 	private CountDownTimer mCountDownTimer;
 	protected ExerciseEvents mCallback;

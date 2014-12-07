@@ -15,6 +15,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class LessonChoiceAdapter extends BaseAdapter {
+	
+	private final int ratingStarsNumber;
+	
 	private List<LessonObject> mLessons;
 	private LayoutInflater mInflater;
 	private Context mContext;
@@ -24,6 +27,7 @@ public class LessonChoiceAdapter extends BaseAdapter {
 		mLessons = lessons;
 		mInflater = LayoutInflater.from(context);
 		mContext = context;
+		ratingStarsNumber = mContext.getResources().getInteger(R.integer.rating_num_stars);
 	}
 	
 	public void setDataSource(List<LessonObject> lessons) {
@@ -86,7 +90,7 @@ public class LessonChoiceAdapter extends BaseAdapter {
 			float obtainedScore = lesson.getScoreObtained(); 
 			// score out of 10. This value determines the stars
 			int totalScore = PlayExercisesActivity.TOTAL_NUMBER_OF_EXERCISES * lesson.getScoreAwarded(new MathGeniusesDbAdapter(mContext));
-			float ratePoints = obtainedScore / totalScore * 3;
+			float ratePoints = obtainedScore / totalScore * ratingStarsNumber;
 			holder.tvProgress.setVisibility(View.GONE);
 			holder.ratingBar.setVisibility(View.VISIBLE);
 			holder.ratingBar.setRating(ratePoints);
