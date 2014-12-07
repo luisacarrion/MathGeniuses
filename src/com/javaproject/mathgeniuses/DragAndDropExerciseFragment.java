@@ -26,11 +26,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	
 	private int ratingStarsNumber;
 	
-	private String mExercise;
-	private int mAnswer;
-	private int mScoreAwarded;
-	private int mScoreObtained;
-	private long mLessonId;
+	
 	private int mCounter = 0;
 	
 	private ArrayList<Integer> mImageRefs;
@@ -114,12 +110,11 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 	
 	@Override
 	public int calculateScore() {
-		int score = 0;
 		int answer = Integer.parseInt( mTvAnswer.getText().toString() );
 		if (answer == mAnswer) {
-			score = mScoreAwarded;
+			mScoreObtained = mScoreAwarded;
 		}
-		return score;
+		return mScoreObtained;
 	}
 	
 	private void populate(int n, int drawable)
