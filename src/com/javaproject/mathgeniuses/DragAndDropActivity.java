@@ -9,6 +9,7 @@ import android.content.ClipDescription;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
@@ -34,7 +35,8 @@ public class DragAndDropActivity extends Activity
 	private ImageAdapter mAnswerImageAdapter;
 	private TextView mTvAnswer;
 	private long mLessonId;
-	private int mCounter=0;
+	private int mCounter = 0;
+	private TextView mTvTimer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -42,12 +44,13 @@ public class DragAndDropActivity extends Activity
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fingers_grid_layout);
-		Intent intent=getIntent();
-		mLessonId=intent.getExtras().getLong("lessonId");
-		Log.i("MGN", "LessonID: "+mLessonId);
+		Intent intent = getIntent();
+		mLessonId = intent.getExtras().getLong("lessonId");
+		Log.i("MGN", "LessonID: " + mLessonId);
 		mImageRefs = new ArrayList<Integer>();
 		mAnswerImageRefs = new ArrayList<Integer>();
-		mTvAnswer=(TextView)findViewById(R.id.tvAnswer);
+		mTvAnswer = (TextView) findViewById(R.id.tvAnswer);
+		mTvTimer = (TextView) findViewById(R.id.tvTimer);
 
 		populate(10, R.drawable.finger);
 		populateResponseGrid(0, R.drawable.finger);
@@ -60,10 +63,9 @@ public class DragAndDropActivity extends Activity
 
 		mGridView.setAdapter(mImageAdapter);
 		mAnswerGrid.setAdapter(mAnswerImageAdapter);
-		
-		
-		getExercises();
 
+		getExercises();
+		startTimer();
 	}
 
 	private class ImageAdapter extends BaseAdapter
@@ -113,7 +115,6 @@ public class DragAndDropActivity extends Activity
 				imageView.setLayoutParams(new GridView.LayoutParams(90, 90));
 				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 				imageView.setPadding(8, 8, 8, 8);
-				
 
 			} else
 			{
@@ -153,8 +154,8 @@ public class DragAndDropActivity extends Activity
 								// mGridView.refreshDrawableState();
 								mAnswerImageAdapter.notifyDataSetChanged();
 								mCounter++;
-								mTvAnswer.setText(String.valueOf(mCounter));								
-								
+								mTvAnswer.setText(String.valueOf(mCounter));
+
 							}
 							break;
 						case DragEvent.ACTION_DRAG_LOCATION:
@@ -165,7 +166,7 @@ public class DragAndDropActivity extends Activity
 							Log.d("MGN",
 									"Action is DragEvent.ACTION_DRAG_ENDED");
 							// Do nothing
-	
+
 							break;
 						case DragEvent.ACTION_DROP:
 							Log.d("MGN", "ACTION_DROP event");
@@ -185,7 +186,6 @@ public class DragAndDropActivity extends Activity
 			return imageView;
 		}
 
-
 	}
 
 	private class TouchListener implements View.OnTouchListener
@@ -204,14 +204,13 @@ public class DragAndDropActivity extends Activity
 
 			Toast.makeText(getApplicationContext(), "In long click",
 					Toast.LENGTH_LONG).show();
-			
+
 			DragShadowBuilder shadowBuilder = new DragShadowBuilder(view);
 			view.startDrag(dragData, shadowBuilder, view, 0);
 
 			return true;
 		}
 	}
-
 
 	private void populate(int n, int drawable)
 	{
@@ -229,15 +228,36 @@ public class DragAndDropActivity extends Activity
 		}
 	}
 
-	private void getExercises(){
-		List<ExerciseObject>exercises=new ArrayList<ExerciseObject>();
-		MathGeniusesDbAdapter dbAdapter=new MathGeniusesDbAdapter(this);
+	private void getExercises()
+	{
+		List<ExerciseObject> exercises = new ArrayList<ExerciseObject>();
+		MathGeniusesDbAdapter dbAdapter = new MathGeniusesDbAdapter(this);
 		dbAdapter.open();
-		exercises=dbAdapter.fetchExercises(mLessonId);
-		for(int i=0;i<exercises.size();i++){
-			Log.i("MGN", "Lesson "+ mLessonId+" Exercise "+i+1+": "+exercises.get(i).getExercise());
-			
+		exercises = dbAdapter.fetchExercises(mLessonId);
+		for (int i = 0; i < exercises.size(); i++)
+		{
+			Log.i("MGN", "Lesson " + mLessonId + " Exercise " + i + 1 + ": "
+					+ exercises.get(i).getExercise());
+
 		}
-		
+
+	}
+
+	private void startTimer()
+	{
+		new CountDownTimer(180000, 1000)
+		{
+
+			public void onTick(long millisUntilFinished)
+			{
+				mTvTimer.setText((millisUntilFinished / 60000) + ":"
+						+ (millisUntilFinished % 60000 / 1000));
+			}
+
+			public void onFinish()
+			{
+				mTvTimer.setText("00:00");
+			}
+		}.start();
 	}
 }
