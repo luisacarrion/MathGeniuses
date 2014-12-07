@@ -167,18 +167,10 @@ public class MainActivity extends PlusBaseActivity
 				
 		mAdd.setOnClickListener(new OnClickListener()
 		{
-
 			@Override
 			public void onClick(View v)
 			{
-				// TODO Auto-generated method stub
-				mDb.fetchLessons(1);
-				mDb.fetchLessonsWithScore(1);
-				mDb.fetchOperations(); 	
-				
-				Intent intent =new Intent(MainActivity.this,LessonChoiceActivity.class);
-				startActivity(intent);		 
-
+				startLessonChoiceActivityForOperation( getResources().getString(R.string.operation_addition) );
 			}
 
 		});
@@ -188,9 +180,7 @@ public class MainActivity extends PlusBaseActivity
 			@Override
 			public void onClick(View arg0)
 			{
-				// TODO Auto-generated method stub
-				mDb.fetchLessons(2);
-				// Go to the subtraction selection screen
+				startLessonChoiceActivityForOperation( getResources().getString(R.string.operation_subtraction) );
 			}
 			
 		});
@@ -200,9 +190,7 @@ public class MainActivity extends PlusBaseActivity
 			@Override
 			public void onClick(View v)
 			{
-				// TODO Auto-generated method stub
-				mDb.fetchLessons(3);
-				// Go to the Multiplication selection screen
+				startLessonChoiceActivityForOperation( getResources().getString(R.string.operation_multiplication) );
 			}
 			
 		});
@@ -212,9 +200,7 @@ public class MainActivity extends PlusBaseActivity
 			@Override
 			public void onClick(View v)
 			{
-				// TODO Auto-generated method stub
-				mDb.fetchLessons(4);
-				// Go to the Division selection screen
+				startLessonChoiceActivityForOperation( getResources().getString(R.string.operation_division) );
 			}
 			
 		});
@@ -224,16 +210,19 @@ public class MainActivity extends PlusBaseActivity
 			@Override
 			public void onClick(View v)
 			{
-				// TODO Auto-generated method stub
-				mDb.fetchLessons(5);
-				// Go to the All selection screen
+				startLessonChoiceActivityForOperation( getResources().getString(R.string.operation_4_basic) );
 			}
 			
 		});
+	}
+	
+	private void startLessonChoiceActivityForOperation(String operationName) {
+		Intent intent =new Intent(MainActivity.this,LessonChoiceActivity.class);
+		long lessonCategoryId = mDb.getOperationId( operationName );
+		Log.d(TAG, "Lesson Category & ID selected: " + operationName + ", " + lessonCategoryId);
 		
-		
-		
-		
+		intent.putExtra(LessonChoiceActivity.KEY_OPERATION_ID, lessonCategoryId);
+		startActivity(intent);
 	}
 
 }

@@ -1,6 +1,9 @@
 package com.javaproject.mathgeniuses;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import com.javaproject.mathgeniuses.database.MathGeniusesDbAdapter;
+import com.javaproject.mathgeniuses.entities.LessonObject;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,45 +14,41 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-public class LessonChoiceAdapter extends BaseAdapter
-{
-	private ArrayList<String> mLessonNames;
+public class LessonChoiceAdapter extends BaseAdapter {
+	private List<LessonObject> mLessons;
 	private LayoutInflater mInflater;
+	private Context mContext;
 
-	public LessonChoiceAdapter(Context context, ArrayList<String> lessonNames)
+	public LessonChoiceAdapter(Context context, List<LessonObject> lessons)
 	{
-		mLessonNames = lessonNames;
+		mLessons = lessons;
 		mInflater = LayoutInflater.from(context);
+		mContext = context;
 	}
 
 	@Override
 	public int getCount()
 	{
-		// TODO Auto-generated method stub
-		return mLessonNames.size();
+		return mLessons.size();
 	}
 
 	@Override
 	public Object getItem(int position)
 	{
-		// TODO Auto-generated method stub
-		return mLessonNames.get(position);
+		return mLessons.get(position);
 	}
-
+	
 	@Override
 	public long getItemId(int position)
 	{
-		// TODO Auto-generated method stub
-		return position;
+		return mLessons.get(position).getId();
 	}
 
 	@Override
-	public View getView(int poition, View convertView, ViewGroup parent)
+	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		// TODO Auto-generated method stub
 		ViewHolder holder;
-		if (convertView == null)
-		{
+		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = mInflater.inflate(R.layout.lesson_choice_views, null);
 			holder.ratingBar = (RatingBar) convertView
@@ -58,38 +57,36 @@ public class LessonChoiceAdapter extends BaseAdapter
 					.findViewById(R.id.tvProgess);
 			holder.tvLessonName = (TextView) convertView
 					.findViewById(R.id.tvLessonName);
-			holder.progrssBar = (ProgressBar) convertView
+			holder.progressBar = (ProgressBar) convertView
 					.findViewById(R.id.progressBar);
 			convertView.setTag(holder);
-		} else
-		{
+		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		// The number of attempted exercises per lesson should be gotten from
-		// the database
-
-		// int attemptedExrcises=dbObj.getAttemptedExercises(int lessonId);
 		
-		int attemptedExercises = 9; //This value shows the progress
-		int progress = attemptedExercises * 10;
-		// int totalScore=dbObj.getTotalScore(int lessonId) // from the database
+		LessonObject lesson = mLessons.get(position);
 		
-		// score out of 10. This value determines the rate points
-		float totalScore = 9; 
-		float ratePoints = totalScore / 2;
-		if (progress < 100)
-		{
+		holder.tvLessonName.setText(lesson.getName());
+		
+		int attemptedExercises = lesson
+				.getNumberOfAttemptedExercises(new MathGeniusesDbAdapter(mContext));
+		int progress = attemptedExercises * PlayExercisesActivity.TOTAL_NUMBER_OF_EXERCISES;
+		holder.progressBar.setProgress(progress);
+		
+		if (progress < 100) {
+			// If lesson is not completed, show % of progress
 			holder.tvProgress.setText(String.valueOf(progress) + "%");
-
-		} else
-		{
+			
+		} else {
+			// If lesson is completed, show from 0 to 5 stars
+			float totalScore = lesson.getScoreObtained(); 
+			// score out of 10. This value determines the stars
+			float ratePoints = totalScore / 2;
 			holder.tvProgress.setVisibility(View.GONE);
 			holder.ratingBar.setVisibility(View.VISIBLE);
 			holder.ratingBar.setRating(ratePoints);
 		}
-		holder.progrssBar.setProgress(progress);
-		holder.tvLessonName.setText(mLessonNames.get(poition));
-
+		
 		return convertView;
 	}
 
@@ -98,7 +95,7 @@ public class LessonChoiceAdapter extends BaseAdapter
 		private RatingBar ratingBar;
 		private TextView tvProgress;
 		private TextView tvLessonName;
-		private ProgressBar progrssBar;
+		private ProgressBar progressBar;
 	}
 
 }

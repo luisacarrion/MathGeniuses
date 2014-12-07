@@ -47,6 +47,30 @@ public class MathGeniusesDbAdapter {
     }
     
     
+    public long getOperationId(String operationName) {
+    	long operationId = -1;
+    	
+    	String[] projection = { Operation._ID };
+    	String selection = Operation.COLUMN_NAME_NAME + " = ?";
+    	String[] selectionArgs = { operationName };
+    	
+    	Cursor results = mDb.query(
+    			Operation.TABLE_NAME,  // The table to query
+    			projection,         // The columns to return
+    			selection,          		// The columns for the WHERE clause
+    			selectionArgs,      			// The values for the WHERE clause
+    			null,               // don't group the rows
+    			null,               // don't filter by row groups
+    			null           		// The sort order
+    		);
+
+    	results.moveToFirst();
+    	operationId = results.getLong(results.getColumnIndex(Operation._ID));
+        results.close();
+        
+        return operationId;
+    }
+    
     
     public List<OperationObject> fetchOperations() {
     	List<OperationObject> operationsList = new ArrayList<OperationObject>();
@@ -172,6 +196,8 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
     			" = " + LessonScore.TABLE_NAME + "." + LessonScore.COLUMN_NAME_LESSON_ID +
     			(selection != null ? " WHERE " + selection : "") +
     			" ORDER BY " + Lesson.COLUMN_NAME_LESSON_ORDER + " ASC";
+    	// TODO: change the hardcoded number of attempted exercises. I think the query should be like 
+    	// WHERE ExerciseScore != null HAVING Exercise.lessonid == Lesson._id
     	
     	Cursor results = mDb.rawQuery(sql, selectionArgs);
     	
@@ -180,7 +206,7 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
         	lessonsList.add(new LessonObject(
         			results.getLong(results.getColumnIndex(Lesson._ID)), 
         			results.getString(results.getColumnIndex(Lesson.COLUMN_NAME_NAME)), 
-        			0)
+        			results.getInt(results.getColumnIndex(LessonScore.COLUMN_NAME_SCORE))) 
         	);
             results.moveToNext();
         }
@@ -258,6 +284,31 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
         results.close();
         
         return exercisesList;
+    }
+    
+    public int getNumberOfAttemptedExercisesForLesson(long lessonId) {
+    	final String columnCountName = "quantity";
+    	int attemptedExercises = 0;
+    	
+    	// TODO: add a selection argument for the current user
+    	// For each row that matches, return a 1, and count the amount of rows
+    	String sql = "SELECT COUNT(1) AS " + columnCountName +
+    			" FROM " + Exercise.TABLE_NAME +
+    			" INNER JOIN " + ExerciseScore.TABLE_NAME +
+    			" ON " + Exercise.TABLE_NAME + "." + Exercise._ID +
+    			" = " + ExerciseScore.TABLE_NAME + "." + ExerciseScore.COLUMN_NAME_EXERCISE_ID +
+    			" WHERE " + Exercise.COLUMN_NAME_LESSON_ID + " = ?" +
+    			" AND " + ExerciseScore.COLUMN_NAME_SCORE + " NOT NULL";
+    	
+    	String[] selectionArgs = { String.valueOf(lessonId) };
+    	
+    	Cursor results = mDb.rawQuery(sql, selectionArgs);
+    	
+    	results.moveToFirst();
+    	attemptedExercises = results.getInt(results.getColumnIndex(columnCountName));
+    	results.close();
+    	
+    	return attemptedExercises;
     }
     
     public void bulkInsertCatalogs() {
@@ -349,6 +400,7 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
 		operationsIds.put(mContext.getString(R.string.operation_subtraction), insertWithArgs(statement, mContext.getString(R.string.operation_subtraction)));
 		operationsIds.put(mContext.getString(R.string.operation_multiplication), insertWithArgs(statement, mContext.getString(R.string.operation_multiplication)));
 		operationsIds.put(mContext.getString(R.string.operation_division), insertWithArgs(statement, mContext.getString(R.string.operation_division)));
+		operationsIds.put(mContext.getString(R.string.operation_4_basic), insertWithArgs(statement, mContext.getString(R.string.operation_4_basic)));
 		
 		return operationsIds;
 	}

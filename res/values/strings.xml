@@ -9,6 +9,7 @@
     <string name="operation_subtraction">Subtraction</string>
     <string name="operation_multiplication">Multiplication</string>
     <string name="operation_division">Division</string>
+    <string name="operation_4_basic">4 Basic Operations</string>
     <string name="lesson_category_0to3">between 0 and 3</string>
     <string name="lesson_category_0to5">between 0 and 5</string>
     <string name="lesson_category_0to7">between 0 and 7</string>
@@ -16,7 +17,7 @@
     <string name="lesson_title">Lesson</string>
     <string name="addition">Addition</string>
     <string name="drag">Drag and drop</string>
-    
-    
+    <string name="title_activity_play_exercises">PlayExercisesActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
