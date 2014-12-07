@@ -61,7 +61,7 @@ public class LessonChoiceActivity extends Activity {
 		mathAdapter.open();
 		
 		List<LessonObject> lessonObjectsList;
-		lessonObjectsList = mathAdapter.fetchLessons(mOperationId);
+		lessonObjectsList = mathAdapter.fetchLessonsWithScore(mOperationId);
 		Log.i("MGEN", "The number of lessons: " + lessonObjectsList.size());
 		mathAdapter.close();
 		

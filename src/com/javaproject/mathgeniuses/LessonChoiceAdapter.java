@@ -83,9 +83,10 @@ public class LessonChoiceAdapter extends BaseAdapter {
 			
 		} else {
 			// If lesson is completed, show from 0 to 5 stars
-			float totalScore = lesson.getScoreObtained(); 
+			float obtainedScore = lesson.getScoreObtained(); 
 			// score out of 10. This value determines the stars
-			float ratePoints = totalScore / 2;
+			int totalScore = PlayExercisesActivity.TOTAL_NUMBER_OF_EXERCISES * lesson.getScoreAwarded(new MathGeniusesDbAdapter(mContext));
+			float ratePoints = obtainedScore / totalScore * 3;
 			holder.tvProgress.setVisibility(View.GONE);
 			holder.ratingBar.setVisibility(View.VISIBLE);
 			holder.ratingBar.setRating(ratePoints);

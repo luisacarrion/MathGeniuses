@@ -64,7 +64,7 @@ public class LessonObject {
 			db.close();
 		} 
 		
-		return mNumberOfAttemptedExercises;
+		return mScoreAwarded;
 	}
 	
 	public static int getScoreAwarded(MathGeniusesDbAdapter db, long lessonId) {

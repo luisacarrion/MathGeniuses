@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         style="?android:attr/ratingBarStyleSmall"
         android:layout_alignTop="@+id/tvLessonName"
+        android:numStars="3"
         android:visibility="gone"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"/>
