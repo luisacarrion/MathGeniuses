@@ -99,7 +99,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		
 		mOptionImageRefs = new ArrayList<Integer>();
 		mAnswerImageRefs = new ArrayList<Integer>();
-		populateOptionImageReferences(mScoreAwarded, OBJECT_IMAGE);
+		populateOptionImageReferences(mScoreAwarded + 2, OBJECT_IMAGE);
 		populateAnswerImageReferences(0, OBJECT_IMAGE);
 
 		mOptionImageAdapter = new ImageAdapter(getActivity(), mOptionImageRefs, OPTION_IMAGE);
