@@ -75,6 +75,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:text="@string/verify" />
+    <TextView 
+        android:id="@+id/tvIndication"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnVerify"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:textColor="#2B547E"
+        android:textSize="20dp"
+        android:text="@string/drag_indicator"/>
 
     <TextView
         android:id="@+id/tvAnswer"

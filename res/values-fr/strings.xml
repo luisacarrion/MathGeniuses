@@ -19,7 +19,8 @@
     <string name="drag">Glisser et déposer</string>
     <string name="title_activity_play_exercises">Joue aux Exercices</string>
     <string name="score">Points</string>
-    <string name="verify">Verifier</string>
-     <string name="all">Tous</string>
-    
+    <string name="verify">Vérifier</string>
+    <string name="all">Tous</string>
+    <string name="drag_indicator">Pour répondre, glissez et déposez le doigt vers le haut </string>
+
 </resources>
