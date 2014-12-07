@@ -2,6 +2,7 @@ package com.javaproject.mathgeniuses;
 
 import java.util.List;
 
+import com.javaproject.mathgeniuses.AbstractExerciseFragment.ExerciseEvents;
 import com.javaproject.mathgeniuses.database.MathGeniusesDbAdapter;
 import com.javaproject.mathgeniuses.entities.ExerciseObject;
 import com.javaproject.mathgeniuses.entities.LessonObject;
@@ -9,6 +10,7 @@ import com.javaproject.mathgeniuses.entities.LessonObject;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +26,7 @@ import android.os.Build;
  * @author MariaLuisa
  *
  */
-public class PlayExercisesActivity extends Activity {
+public class PlayExercisesActivity extends Activity implements ExerciseEvents {
 	
 	public static final String KEY_LESSON_ID = "keyLessonId";
 	public static final int TOTAL_NUMBER_OF_EXERCISES = 10;
@@ -46,8 +48,11 @@ public class PlayExercisesActivity extends Activity {
 		mExerciseObjectsList = getExercises(mLessonId);	
 		
 		if (savedInstanceState == null) {
+			
+			AbstractExerciseFragment exerciseFragment = getNewExerciseFragment();
+			
 			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
+					.add(R.id.container, exerciseFragment).commit();
 		}
 	}
 
@@ -81,20 +86,37 @@ public class PlayExercisesActivity extends Activity {
 		return exerciseObjectsList;
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
+	@Override
+	public void onExerciseEnd() {
+		if (!exercisesCompleted()) {
+			mCurrentExercise++;
+			
+			AbstractExerciseFragment exerciseFragment = getNewExerciseFragment();
 
-		public PlaceholderFragment() {
-		}
+	        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+	        transaction.replace(R.id.container, exerciseFragment);
+	        // Add the transaction to the back stack so the user can navigate back
+	        //transaction.addToBackStack(null);
 
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_play_exercises,
-					container, false);
-			return rootView;
+	        transaction.commit();
 		}
 	}
+	
+	private AbstractExerciseFragment getNewExerciseFragment() {
+		AbstractExerciseFragment fragmentToReturn;
+		
+		fragmentToReturn = new DragAndDropExerciseFragment();
+		
+		Bundle args = new Bundle();
+        args.putString(AbstractExerciseFragment.KEY_EXERCISE, 
+        		mExerciseObjectsList.get(mCurrentExercise).getExercise());
+        fragmentToReturn.setArguments(args);
+		
+		return fragmentToReturn;
+	}
+	
+	private boolean exercisesCompleted() {
+		return (mCurrentExercise == TOTAL_NUMBER_OF_EXERCISES - 1);
+	}
+
 }

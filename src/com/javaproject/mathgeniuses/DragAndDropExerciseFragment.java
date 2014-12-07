@@ -1,73 +1,103 @@
 package com.javaproject.mathgeniuses;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
-import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.javaproject.mathgeniuses.database.MathGeniusesDbAdapter;
-import com.javaproject.mathgeniuses.entities.ExerciseObject;
-
-public class DragAndDropActivity extends Activity
-{
-	private GridView mGridView, mAnswerGrid;
-	private ArrayList<Integer> mImageRefs;
-	private ArrayList<Integer> mAnswerImageRefs;
-	private ImageAdapter mImageAdapter;
-	private ImageAdapter mAnswerImageAdapter;
-	private TextView mTvAnswer;
+public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
+	
+	private String mExercise;
 	private long mLessonId;
 	private int mCounter = 0;
+	
+	private ArrayList<Integer> mImageRefs;
+	private ArrayList<Integer> mAnswerImageRefs;
+	
+	private ImageAdapter mImageAdapter;
+	private ImageAdapter mAnswerImageAdapter;
+	
 	private TextView mTvTimer;
+	private TextView mTvExercise;
+	private GridView mAnswerGrid;
+	private TextView mTvAnswer;
+	private GridView mGridView;
+	
+	public DragAndDropExerciseFragment() {
+		// Required empty public constructor
+	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fingers_grid_layout);
-		Intent intent = getIntent();
-		mLessonId = intent.getExtras().getLong("lessonId");
-		Log.i("MGN", "LessonID: " + mLessonId);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        Bundle args = getArguments();
+        if (args != null) {
+        	mExercise = args.getString(AbstractExerciseFragment.KEY_EXERCISE);
+        }
+    }
+	
+	@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_drag_and_drop_exercise, container, false);
+    }
+	
+	@Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        setActivityCallback(activity);
+    }
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		
+		mTvTimer = (TextView) getActivity().findViewById(R.id.tvTimer);
+		mTvExercise = (TextView) getActivity().findViewById(R.id.tvExercise);
+		mAnswerGrid = (GridView) getActivity().findViewById(R.id.answerGrid);
+		mTvAnswer = (TextView) getActivity().findViewById(R.id.tvAnswer);
+		mGridView = (GridView) getActivity().findViewById(R.id.gridview);
+		
+		mTvExercise.setText(mExercise);
+		
 		mImageRefs = new ArrayList<Integer>();
 		mAnswerImageRefs = new ArrayList<Integer>();
-		mTvAnswer = (TextView) findViewById(R.id.tvAnswer);
-		mTvTimer = (TextView) findViewById(R.id.tvTimer);
-
 		populate(10, R.drawable.finger);
 		populateResponseGrid(0, R.drawable.finger);
 
-		mGridView = (GridView) findViewById(R.id.gridview);
-		mAnswerGrid = (GridView) findViewById(R.id.answerGrid);
-
-		mImageAdapter = new ImageAdapter(this, mImageRefs, "set");
-		mAnswerImageAdapter = new ImageAdapter(this, mAnswerImageRefs, "");
+		mImageAdapter = new ImageAdapter(getActivity(), mImageRefs, "set");
+		mAnswerImageAdapter = new ImageAdapter(getActivity(), mAnswerImageRefs, "");
 
 		mGridView.setAdapter(mImageAdapter);
 		mAnswerGrid.setAdapter(mAnswerImageAdapter);
 
-		getExercises();
+		setTimer(mTvTimer);
 		startTimer();
 	}
-
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		stopTimer();
+	}
+	
 	private class ImageAdapter extends BaseAdapter
 	{
 		private Context mContext;
@@ -202,7 +232,7 @@ public class DragAndDropActivity extends Activity
 			ClipData dragData = new ClipData((CharSequence) view.getTag(),
 					mimeType, item);
 
-			Toast.makeText(getApplicationContext(), "In long click",
+			Toast.makeText(getActivity(), "In long click",
 					Toast.LENGTH_LONG).show();
 
 			DragShadowBuilder shadowBuilder = new DragShadowBuilder(view);
@@ -227,37 +257,5 @@ public class DragAndDropActivity extends Activity
 			mAnswerImageRefs.add(drawable);
 		}
 	}
-
-	private void getExercises()
-	{
-		List<ExerciseObject> exercises = new ArrayList<ExerciseObject>();
-		MathGeniusesDbAdapter dbAdapter = new MathGeniusesDbAdapter(this);
-		dbAdapter.open();
-		exercises = dbAdapter.fetchExercises(mLessonId);
-		for (int i = 0; i < exercises.size(); i++)
-		{
-			Log.i("MGN", "Lesson " + mLessonId + " Exercise " + i + 1 + ": "
-					+ exercises.get(i).getExercise());
-
-		}
-
-	}
-
-	private void startTimer()
-	{
-		new CountDownTimer(180000, 1000)
-		{
-
-			public void onTick(long millisUntilFinished)
-			{
-				mTvTimer.setText((millisUntilFinished / 60000) + ":"
-						+ (millisUntilFinished % 60000 / 1000));
-			}
-
-			public void onFinish()
-			{
-				mTvTimer.setText("00:00");
-			}
-		}.start();
-	}
+	
 }

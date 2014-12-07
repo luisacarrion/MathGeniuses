@@ -17,14 +17,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/chrono" />
+        android:layout_alignTop="@+id/tvTimer" />
 
+    <TextView
+        android:id="@+id/tvExercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTimer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:textSize="25sp" />
+    
     <GridView
         android:id="@+id/answerGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/chrono"
-        android:layout_marginTop="80dp"
+        android:layout_below="@+id/tvExercise"
+        android:layout_marginTop="5dp"
         android:background="#808080"
         android:columnWidth="40dp"
         android:horizontalSpacing="10dp"
