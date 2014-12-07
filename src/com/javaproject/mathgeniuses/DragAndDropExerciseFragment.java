@@ -184,7 +184,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 			if (convertView == null)
 			{
 				imageView = new ImageView(mContext);
-				imageView.setLayoutParams(new ViewGroup.LayoutParams(250, 250));
+				imageView.setLayoutParams(new GridView.LayoutParams(250, 250));
 				imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 				imageView.setPadding(2, 2, 2, 2);
 
