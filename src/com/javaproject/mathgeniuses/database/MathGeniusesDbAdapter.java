@@ -652,6 +652,67 @@ public List<LessonObject> fetchLessonsWithScore(long... operationIds) {
         insertWithArgs(statementExercise, lastLessonId,
         		"8 + 2", 10, ++exerciseOrder);
         
+        
+        
+        // Subtraction Lessons
+        operationId = operationsIds.get(mContext.getString(R.string.operation_subtraction));
+        lessonOrder = 0;
+        
+        // Subtraction - Lesson 1
+        lastLessonId = insertWithArgs(statementLesson, operationId, categoriesIds.get(mContext.getString(R.string.lesson_category_0to3)), 
+        		mContext.getString(R.string.lesson_title) + " " + ++lessonOrder, lessonOrder);
+        
+        // Subtraction - Lesson 1 - Exercises
+        exerciseOrder = 0;
+        insertWithArgs(statementExercise, lastLessonId,
+        		"1 - 1", 0, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"1 - 0", 1, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"1 - 1", 0, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"2 - 1 - 1", 0, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"2 - 1", 1, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"3 - 1", 2, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"2 - 2", 0, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"3 - 2", 1, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"3 - 0", 3, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"2 - 0 - 1", 1, ++exerciseOrder);
+        
+        
+        // Addition - Lesson 2
+        lastLessonId = insertWithArgs(statementLesson, operationId, categoriesIds.get(mContext.getString(R.string.lesson_category_0to5)), 
+        		mContext.getString(R.string.lesson_title) + " " + ++lessonOrder, lessonOrder);
+        
+        // Addition - Lesson 2 - Exercises
+        exerciseOrder = 0;
+        insertWithArgs(statementExercise, lastLessonId,
+        		"3 - 1 - 1", 1, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"2 - 1", 1, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"4 - 1 - 1", 2, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"4 - 1", 3, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"3 - 1 - 1", 1, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"4 - 2", 2, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"5 - 2 - 1", 2, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"5 - 1 - 1 - 1", 2, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"5 - 2", 3, ++exerciseOrder);
+        insertWithArgs(statementExercise, lastLessonId,
+        		"5 - 1", 4, ++exerciseOrder);
+        
 	}
 	
 	public Long insertWithArgs(SQLiteStatement statement, Object... args) {

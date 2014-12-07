@@ -80,6 +80,7 @@ public class DragAndDropExerciseFragment extends AbstractExerciseFragment {
 		mGridView = (GridView) getActivity().findViewById(R.id.gridview);
 		
 		mTvExercise.setText(mExercise);
+		mTvAnswer.setText("0");
 		
 		mImageRefs = new ArrayList<Integer>();
 		mAnswerImageRefs = new ArrayList<Integer>();
